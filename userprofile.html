@@ -1,0 +1,141 @@
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TMS Portal - Profile</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'], },
+          colors: {
+            primary: '#F16611', 'primary-dark': '#D95A0E', 'dark-bg': '#0D1117',
+            'dark-card': '#161B22', 'dark-border': '#30363D',
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* Custom Styles */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #30363D; border-radius: 3px; }
+
+    body::before { /* Aurora Background */
+        content: ''; position: absolute; inset: 0;
+        background-image: radial-gradient(circle at 15% 15%, #F1661120 0%, transparent 25%),
+                          radial-gradient(circle at 85% 75%, #4f46e520 0%, transparent 25%);
+        filter: blur(60px); z-index: -1; animation: subtle-move 20s infinite alternate;
+    }
+    @keyframes subtle-move { from { transform: translate(0, 0); } to { transform: translate(20px, -30px); } }
+  </style>
+</head>
+
+<!-- CHANGE HERE: Added overflow-x-hidden to the body for a definitive fix on all screens -->
+<body class="font-sans bg-dark-bg text-gray-300 overflow-x-hidden">
+  
+  <div class="relative min-h-screen md:flex">
+    
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 z-30 md:hidden hidden"></div>
+    
+    <!-- =========== SIDEBAR START =========== -->
+    <aside id="sidebar" class="w-64 flex-shrink-0 bg-dark-card/80 backdrop-blur-xl border-r border-dark-border flex-col
+                             fixed inset-y-0 left-0 z-40 md:relative md:translate-x-0
+                             transform -translate-x-full transition-transform duration-300 ease-in-out">
+        <div class="h-20 flex items-center justify-between px-6 flex-shrink-0">
+            <a href="#" class="flex items-center gap-3"><img src="logo.png" alt="Logo" class="w-10 rounded-full"><span class="text-xl text-white font-bold">TMS Portal</span></a>
+            <button id="close-sidebar-btn" class="md:hidden text-gray-400 hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
+        </div>
+        <nav class="flex-1 px-4 py-6 space-y-2">
+            <a href="adduser.html" class="flex items-center gap-3 px-4 py-2.5 text-gray-400 hover:text-white rounded-lg transition-colors"><i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard</a>
+            <a href="studentprofile.html" class="flex items-center gap-3 px-4 py-2.5 bg-gradient-to-r from-primary to-orange-500 text-white font-semibold rounded-lg shadow-lg"><i data-lucide="user-round" class="w-5 h-5"></i> Profile</a>
+        </nav>
+        <div class="px-4 py-6"><a href="index.html" class="flex items-center gap-3 px-4 py-2.5 text-gray-400 hover:text-red-400 rounded-lg transition-colors"><i data-lucide="log-out" class="w-5 h-5"></i> Log Out</a></div>
+    </aside>
+
+    <!-- =========== MAIN CONTENT START =========== -->
+    <div class="flex-1 flex flex-col max-h-screen">
+        <header class="h-20 flex-shrink-0 flex items-center justify-between px-4 sm:px-8 bg-dark-bg/60 backdrop-blur-xl border-b border-dark-border z-10">
+            <div class="flex items-center gap-4">
+                <button id="open-sidebar-btn" class="md:hidden text-gray-300 hover:text-white"><i data-lucide="menu" class="w-6 h-6"></i></button>
+                <h1 class="text-xl sm:text-2xl font-bold text-white">Student Profile</h1>
+            </div>
+            <button class="flex items-center gap-2"><img src="https://i.postimg.cc/XJ8K3vZ7/user.png" class="w-10 h-10 rounded-full border-2 border-primary" alt="User Avatar"></button>
+        </header>
+        
+        <main class="flex-1 overflow-y-auto p-4 sm:p-8">
+            <div class="mb-8">
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Academic & Personal Information</h2>
+                <p class="text-gray-400">Manage your personal and academic details.</p>
+            </div>
+            
+            <div class="flex flex-col lg:flex-row gap-8">
+
+                <!-- Left Column -->
+                <div class="w-full lg:w-1/3 lg:max-w-xs flex flex-col gap-8">
+                    <div class="bg-dark-card/80 backdrop-blur-lg border border-dark-border p-6 rounded-2xl text-center">
+                        <img src="https://i.postimg.cc/XJ8K3vZ7/user.png" alt="Profile Picture" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-primary shadow-lg">
+                        <h3 class="text-2xl font-bold text-white">M. Zohair</h3>
+                        <p class="text-gray-400 mb-3">STUA44RCA</p>
+                        <span class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-900 text-emerald-300 text-sm font-semibold rounded-md"><span class="h-2 w-2 rounded-full bg-emerald-400"></span>Active Student</span>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div class="w-full lg:w-2/3">
+                    <div class="bg-dark-card/80 backdrop-blur-lg border border-dark-border rounded-2xl p-6">
+                        <div class="flex justify-between items-center mb-4 pb-4 border-b border-dark-border">
+                            <h3 class="text-xl font-semibold text-white">Personal Information</h3>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6 text-sm">
+                            <div><p class="text-gray-400">User Account</p><p class="font-semibold text-white mt-1">m.zohair12</p></div>
+                            <div><p class="text-gray-400">Full Name</p><p class="font-semibold text-white mt-1">M. Zohair</p></div>
+                            <div><p class="text-gray-400">CNIC</p><p class="font-semibold text-white mt-1">34101-1234567-8</p></div>
+                            <div><p class="text-gray-400">Designation</p><p class="font-semibold text-white mt-1">Student</p></div>
+                            <div><p class="text-gray-400">Father's Name</p><p class="font-semibold text-white mt-1">Father's Full Name</p></div>
+                            <div><p class="text-gray-400">Moodle ID</p><p class="font-semibold text-white mt-1">STUA44RCA-moodle</p></div>
+                            <div><p class="text-gray-400">Email Address</p><p class="font-semibold text-white mt-1">m.zohair@example.com</p></div>
+                            <div><p class="text-gray-400">Phone</p><p class="font-semibold text-white mt-1">+92 300 1234567</p></div>
+                            <div class="sm:col-span-2"><p class="text-gray-400">Address</p><p class="font-semibold text-white mt-1">123 University Road, City, Country</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+  <script>
+    lucide.createIcons();
+
+    const sidebar = document.getElementById('sidebar');
+    const openSidebarBtn = document.getElementById('open-sidebar-btn');
+    const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+    const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+    openSidebarBtn.addEventListener('click', () => {
+      sidebar.classList.remove('-translate-x-full');
+      sidebarOverlay.classList.remove('hidden');
+    });
+
+    function closeSidebar() {
+      sidebar.classList.add('-translate-x-full');
+      sidebarOverlay.classList.add('hidden');
+    }
+    
+    closeSidebarBtn.addEventListener('click', closeSidebar);
+    sidebarOverlay.addEventListener('click', closeSidebar);
+  </script>
+</body>
+</html>

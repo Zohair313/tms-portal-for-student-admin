@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TMS Portal - Dashboard</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'], },
+          colors: {
+            primary: '#F16611', 'primary-dark': '#D95A0E', 'dark-bg': '#0D1117',
+            'dark-card': '#161B22', 'dark-border': '#30363D',
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* Custom Styles for Responsive Elements */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #30363D; border-radius: 3px; }
+
+    body::before { /* Aurora Background */
+        content: ''; position: absolute; inset: 0;
+        background-image: radial-gradient(circle at 15% 15%, #F1661120 0%, transparent 25%),
+                          radial-gradient(circle at 85% 75%, #4f46e520 0%, transparent 25%);
+        filter: blur(60px); z-index: -1; animation: subtle-move 20s infinite alternate;
+    }
+    @keyframes subtle-move { from { transform: translate(0, 0); } to { transform: translate(20px, -30px); } }
+
+    /* --- Responsive Table to Card Transformation --- */
+    @media (max-width: 767px) {
+        .responsive-table thead { display: none; }
+        .responsive-table tr {
+            display: block; border-radius: 0.75rem; background-color: #161B22;
+            border: 1px solid #30363D; padding: 1rem; margin-bottom: 1rem;
+        }
+        .responsive-table td {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0.75rem 0.25rem; border-bottom: 1px solid #30363D40;
+        }
+        .responsive-table td:last-child { border-bottom: none; }
+        .responsive-table td::before {
+            content: attr(data-label); font-weight: 600; color: #9CA3AF;
+        }
+    }
+  </style>
+</head>
+
+<!-- CHANGE HERE: Added overflow-x-hidden to the body for a definitive fix on all screens -->
+<body class="font-sans bg-dark-bg text-gray-300 overflow-x-hidden">
+  <div class="relative min-h-screen md:flex">
+    
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 z-30 md:hidden hidden"></div>
+    
+    <!-- =========== SIDEBAR START =========== -->
+    <aside id="sidebar" class="w-64 flex-shrink-0 bg-dark-card/80 backdrop-blur-xl border-r border-dark-border flex-col
+                             fixed inset-y-0 left-0 z-40 md:relative md:translate-x-0
+                             transform -translate-x-full transition-transform duration-300 ease-in-out">
+        <div class="h-20 flex items-center justify-between px-6 flex-shrink-0">
+            <a href="#" class="flex items-center gap-3"><img src="logo.png" alt="Logo" class="w-10 rounded-full"><span class="text-xl text-white font-bold">TMS Portal</span></a>
+            <button id="close-sidebar-btn" class="md:hidden text-gray-400 hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
+        </div>
+        <nav class="flex-1 px-4 py-6 space-y-2">
+            <a href="#" class="flex items-center gap-3 px-4 py-2.5 bg-gradient-to-r from-primary to-orange-500 text-white font-semibold rounded-lg shadow-lg"><i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard</a>
+            <a href="userprofile.html" class="flex items-center gap-3 px-4 py-2.5 text-gray-400 hover:text-white rounded-lg transition-colors"><i data-lucide="user-round" class="w-5 h-5"></i> Profile</a>
+        </nav>
+        <div class="px-4 py-6"><a href="index.html" class="flex items-center gap-3 px-4 py-2.5 text-gray-400 hover:text-red-400 rounded-lg transition-colors"><i data-lucide="log-out" class="w-5 h-5"></i> Log Out</a></div>
+    </aside>
+    <!-- =========== SIDEBAR END =========== -->
+
+    <!-- =========== MAIN CONTENT START =========== -->
+    <div class="flex-1 flex flex-col max-h-screen">
+        <header class="h-20 flex-shrink-0 flex items-center justify-between px-4 sm:px-8 bg-dark-bg/60 backdrop-blur-xl border-b border-dark-border z-10">
+            <div class="flex items-center gap-4">
+                <button id="open-sidebar-btn" class="md:hidden text-gray-300 hover:text-white"><i data-lucide="menu" class="w-6 h-6"></i></button>
+                <h1 class="text-xl sm:text-2xl font-bold text-white">Dashboard</h1>
+            </div>
+            <button id="user-menu-button" class="flex items-center gap-2"><img src="https://i.postimg.cc/XJ8K3vZ7/user.png" class="w-10 h-10 rounded-full border-2 border-primary" alt="User Avatar"></button>
+        </header>
+        
+        <main class="flex-1 overflow-y-auto p-4 sm:p-8">
+            <div class="mb-8"><h2 class="text-2xl sm:text-3xl font-extrabold text-white">Welcome back, Arman!</h2><p class="text-gray-400">Here's a snapshot of your academic progress.</p></div>
+            
+            <div class="bg-dark-card rounded-2xl p-4 sm:p-6 border border-dark-border">
+                <h2 class="text-xl font-semibold text-white mb-4">Course Status</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm responsive-table min-w-[300px] md:min-w-[700px]">
+                        <thead>
+                            <tr class="text-left text-gray-500 uppercase tracking-wider text-xs">
+                                <th class="p-3 font-semibold">Course</th><th class="p-3 font-semibold">Enrolment Date</th>
+                                <th class="p-3 font-semibold">Deadline</th><th class="p-3 font-semibold">Status</th>
+                                <th class="p-3 font-semibold">Designation</th><th class="p-3 font-semibold">Active Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-dark-border/50">
+                            <tr>
+                                <td data-label="Course" class="p-3 font-medium text-white">Data Structure</td>
+                                <td data-label="Enrolled" class="p-3 text-gray-300">01/01/2024</td>
+                                <td data-label="Deadline" class="p-3 text-gray-300">30/06/2024</td>
+                                <td data-label="Status" class="p-3"><span class="px-2 py-1 bg-yellow-900 text-yellow-200 text-xs font-semibold rounded-md">In Progress</span></td>
+                                <td data-label="Designation" class="p-3 text-gray-300">Developer</td>
+                                <td data-label="Active Status" class="p-3"><span class="inline-flex items-center gap-2 px-2 py-1 bg-emerald-900 text-emerald-300 text-xs font-semibold rounded-md"><span class="h-2 w-2 rounded-full bg-emerald-400"></span>Active</span></td>
+                            </tr>
+                            <tr>
+                                <td data-label="Course" class="p-3 font-medium text-white">Algorithm Design</td>
+                                <td data-label="Enrolled" class="p-3 text-gray-300">15/02/2024</td>
+                                <td data-label="Deadline" class="p-3 text-gray-300">15/07/2024</td>
+                                <td data-label="Status" class="p-3"><span class="px-2 py-1 bg-yellow-900 text-yellow-200 text-xs font-semibold rounded-md">In Progress</span></td>
+                                <td data-label="Designation" class="p-3 text-gray-300">Developer</td>
+                                <td data-label="Active Status" class="p-3"><span class="inline-flex items-center gap-2 px-2 py-1 bg-emerald-900 text-emerald-300 text-xs font-semibold rounded-md"><span class="h-2 w-2 rounded-full bg-emerald-400"></span>Active</span></td>
+                            </tr>
+                            <tr>
+                                <td data-label="Course" class="p-3 font-medium text-white">Software Testing</td>
+                                <td data-label="Enrolled" class="p-3 text-gray-300">01/03/2024</td>
+                                <td data-label="Deadline" class="p-3 text-gray-300">01/08/2024</td>
+                                <td data-label="Status" class="p-3"><span class="px-2 py-1 bg-gray-800 text-gray-300 text-xs font-semibold rounded-md">Not Started</span></td>
+                                <td data-label="Designation" class="p-3 text-gray-300">QA Engineer</td>
+                                <td data-label="Active Status" class="p-3"><span class="inline-flex items-center gap-2 px-2 py-1 bg-red-900 text-red-300 text-xs font-semibold rounded-md"><span class="h-2 w-2 rounded-full bg-red-500"></span>Inactive</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+  <script>
+    lucide.createIcons();
+
+    const sidebar = document.getElementById('sidebar');
+    const openSidebarBtn = document.getElementById('open-sidebar-btn');
+    const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+    const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+    openSidebarBtn.addEventListener('click', () => {
+      sidebar.classList.remove('-translate-x-full');
+      sidebarOverlay.classList.remove('hidden');
+    });
+
+    function closeSidebar() {
+      sidebar.classList.add('-translate-x-full');
+      sidebarOverlay.classList.add('hidden');
+    }
+    
+    closeSidebarBtn.addEventListener('click', closeSidebar);
+    sidebarOverlay.addEventListener('click', closeSidebar);
+  </script>
+</body>
+</html>

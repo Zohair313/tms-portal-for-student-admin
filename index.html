@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale-1.0">
+    <title>TMS Portal - Login</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script> <!-- Modern Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], },
+                    colors: {
+                        primary: '#F16611',
+                        'primary-dark': '#D95A0E',
+                        'dark-bg': '#0D1117',
+                        'dark-card': '#161B22',
+                        'dark-border': '#30363D',
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        /* Custom styles for icon positioning */
+        .input-icon-wrapper { position: relative; }
+        .input-icon { position: absolute; top: 50%; transform: translateY(-50%); left: 0.875rem; color: #6B7280; }
+        .input-field { padding-left: 2.75rem; }
+        .password-toggle-icon { position: absolute; top: 50%; transform: translateY(-50%); right: 0.875rem; color: #9CA3AF; cursor: pointer; }
+
+        /* Vanta.js Fullscreen Canvas */
+        #animationDiv {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body class="font-sans text-white bg-dark-bg overflow-x-hidden">
+    <!-- Vanta.js background container -->
+    <div id="animationDiv"></div>
+
+    <!-- CHANGE HERE: Updated flex alignment for desktop -->
+    <div class="flex items-center justify-center md:justify-start md:px-32 min-h-screen p-4">
+        <div class="w-full max-w-sm">
+             <div class="bg-dark-card/80 backdrop-blur-xl border border-dark-border rounded-2xl p-8 shadow-2xl">
+                <!-- Header -->
+                <div class="flex items-center justify-center mb-8">
+                    <img src="logo.png" alt="Logo" class="w-12 h-12 mr-4 rounded-full">
+                    <h1 class="text-3xl font-bold text-white">TMS Portal</h1>
+                </div>
+
+                <!-- Username -->
+                <div class="mb-5 input-icon-wrapper">
+                    <i data-lucide="user" class="input-icon w-5 h-5"></i>
+                    <input type="text" id="username" placeholder="Username" class="input-field w-full py-3 border border-dark-border bg-dark-bg rounded-lg outline-none transition-all duration-300 focus:ring-2 focus:ring-primary placeholder:text-gray-500">
+                </div>
+                
+                <!-- Password -->
+                <div class="mb-4 input-icon-wrapper">
+                    <i data-lucide="lock" class="input-icon w-5 h-5"></i>
+                    <input type="password" id="password" placeholder="Password" class="input-field w-full py-3 border border-dark-border bg-dark-bg rounded-lg outline-none transition-all duration-300 focus:ring-2 focus:ring-primary placeholder:text-gray-500">
+                    <i id="password-toggle" data-lucide="eye" class="password-toggle-icon w-5 h-5"></i>
+                </div>
+                
+                <!-- Remember me & Forgot Password -->
+                <div class="flex items-center justify-between text-sm mb-6">
+                    <label class="flex items-center gap-2 text-gray-400 cursor-pointer">
+                        <input type="checkbox" class="w-4 h-4 text-primary bg-dark-border rounded border-gray-600 focus:ring-primary">
+                        Remember me
+                    </label>
+                    <a href="#" class="font-medium text-primary hover:underline">Forgot password?</a>
+                </div>
+
+                <!-- Error Message -->
+                <div id="error-message" class="hidden text-red-500 text-sm text-center mb-4"></div>
+
+                <!-- Login Button -->
+                <button onclick="login()" class="w-full py-3 border-none rounded-lg bg-primary text-white text-base font-semibold cursor-pointer transition-all duration-300 hover:bg-primary-dark active:scale-[0.98]">
+                    Login
+                </button>
+             </div>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js"></script>
+    <script>
+        lucide.createIcons(); // Initialize Icons
+
+        // Password visibility toggle logic
+        const passwordInput = document.getElementById('password');
+        const passwordToggle = document.getElementById('password-toggle');
+        passwordToggle.addEventListener('click', () => {
+            const isPassword = passwordInput.type === 'password';
+            passwordInput.type = isPassword ? 'text' : 'password';
+            passwordToggle.setAttribute('data-lucide', isPassword ? 'eye-off' : 'eye');
+            lucide.createIcons();
+        });
+
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('error-message');
+
+            if (username.trim() === '' || password.trim() === '') {
+                errorMessage.textContent = 'Please fill in all fields.';
+                errorMessage.classList.remove('hidden');
+                return;
+            }
+            if (username === 'admin' && password === 'password') {
+                window.location.href = 'adduser.html';
+            } else {
+                errorMessage.textContent = 'Invalid Username or Password.';
+                errorMessage.classList.remove('hidden');
+            }
+        }
+
+        // Initialize Vanta.js
+        VANTA.GLOBE({
+            el: "#animationDiv", mouseControls: true, touchControls: true, gyroControls: false,
+            minHeight: 200.00, minWidth: 200.00, scale: 1.00, scaleMobile: 1.00,
+            color: 0xF16611, // Your primary color!
+            backgroundColor: 0x0D1117, // Matches dark-bg
+            points: 10.00, maxDistance: 22.00, spacing: 16.00
+        });
+    </script>
+</body>
+</html>
