@@ -1,16 +1,17 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TMS Portal - Profile</title>
-  
+
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  
+
   <script>
     tailwind.config = {
       theme: {
@@ -27,94 +28,183 @@
 
   <style>
     /* Custom Styles */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #30363D; border-radius: 3px; }
-
-    body::before { /* Aurora Background */
-        content: ''; position: absolute; inset: 0;
-        background-image: radial-gradient(circle at 15% 15%, #F1661120 0%, transparent 25%),
-                          radial-gradient(circle at 85% 75%, #4f46e520 0%, transparent 25%);
-        filter: blur(60px); z-index: -1; animation: subtle-move 20s infinite alternate;
+    ::-webkit-scrollbar {
+      width: 6px;
     }
-    @keyframes subtle-move { from { transform: translate(0, 0); } to { transform: translate(20px, -30px); } }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #30363D;
+      border-radius: 3px;
+    }
+
+    body::before {
+      /* Aurora Background */
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle at 15% 15%, #F1661120 0%, transparent 25%),
+        radial-gradient(circle at 85% 75%, #4f46e520 0%, transparent 25%);
+      filter: blur(60px);
+      z-index: -1;
+      animation: subtle-move 20s infinite alternate;
+    }
+
+    @keyframes subtle-move {
+      from {
+        transform: translate(0, 0);
+      }
+
+      to {
+        transform: translate(20px, -30px);
+      }
+    }
   </style>
 </head>
 
 <!-- CHANGE HERE: Added overflow-x-hidden to the body for a definitive fix on all screens -->
+
 <body class="font-sans bg-dark-bg text-gray-300 overflow-x-hidden">
-  
+
   <div class="relative min-h-screen md:flex">
-    
+
     <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 z-30 md:hidden hidden"></div>
-    
+
     <!-- =========== SIDEBAR START =========== -->
     <aside id="sidebar" class="w-64 flex-shrink-0 bg-dark-card/80 backdrop-blur-xl border-r border-dark-border flex-col
                              fixed inset-y-0 left-0 z-40 md:relative md:translate-x-0
                              transform -translate-x-full transition-transform duration-300 ease-in-out">
-        <div class="h-20 flex items-center justify-between px-6 flex-shrink-0">
-            <a href="#" class="flex items-center gap-3"><img src="logo.png" alt="Logo" class="w-10 rounded-full"><span class="text-xl text-white font-bold">TMS Portal</span></a>
-            <button id="close-sidebar-btn" class="md:hidden text-gray-400 hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
-        </div>
-        <nav class="flex-1 px-4 py-6 space-y-2">
-            <a href="adduser.html" class="flex items-center gap-3 px-4 py-2.5 text-gray-400 hover:text-white rounded-lg transition-colors"><i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard</a>
-            <a href="studentprofile.html" class="flex items-center gap-3 px-4 py-2.5 bg-gradient-to-r from-primary to-orange-500 text-white font-semibold rounded-lg shadow-lg"><i data-lucide="user-round" class="w-5 h-5"></i> Profile</a>
-        </nav>
-        <div class="px-4 py-6"><a href="index.html" class="flex items-center gap-3 px-4 py-2.5 text-gray-400 hover:text-red-400 rounded-lg transition-colors"><i data-lucide="log-out" class="w-5 h-5"></i> Log Out</a></div>
+      <div class="h-20 flex items-center justify-between px-6 flex-shrink-0">
+        <a href="#" class="flex items-center gap-3"><img src="logo.png" alt="Logo" class="w-10 rounded-full"><span
+            class="text-xl text-white font-bold">TMS Portal</span></a>
+        <button id="close-sidebar-btn" class="md:hidden text-gray-400 hover:text-white"><i data-lucide="x"
+            class="w-6 h-6"></i></button>
+      </div>
+      <nav class="flex-1 px-4 py-6 space-y-2">
+        <a href="adduser.html"
+          class="flex items-center gap-3 px-4 py-2.5 text-gray-400 hover:text-white rounded-lg transition-colors"><i
+            data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard</a>
+        <a href="studentprofile.html"
+          class="flex items-center gap-3 px-4 py-2.5 bg-gradient-to-r from-primary to-orange-500 text-white font-semibold rounded-lg shadow-lg"><i
+            data-lucide="user-round" class="w-5 h-5"></i> Profile</a>
+      </nav>
+      <div class="px-4 py-6"><a href="index.html"
+          class="flex items-center gap-3 px-4 py-2.5 text-gray-400 hover:text-red-400 rounded-lg transition-colors"><i
+            data-lucide="log-out" class="w-5 h-5"></i> Log Out</a></div>
     </aside>
 
     <!-- =========== MAIN CONTENT START =========== -->
     <div class="flex-1 flex flex-col max-h-screen">
-        <header class="h-20 flex-shrink-0 flex items-center justify-between px-4 sm:px-8 bg-dark-bg/60 backdrop-blur-xl border-b border-dark-border z-10">
-            <div class="flex items-center gap-4">
-                <button id="open-sidebar-btn" class="md:hidden text-gray-300 hover:text-white"><i data-lucide="menu" class="w-6 h-6"></i></button>
-                <h1 class="text-xl sm:text-2xl font-bold text-white">Student Profile</h1>
-            </div>
-            <button class="flex items-center gap-2"><img src="https://i.postimg.cc/XJ8K3vZ7/user.png" class="w-10 h-10 rounded-full border-2 border-primary" alt="User Avatar"></button>
-        </header>
-        
-        <main class="flex-1 overflow-y-auto p-4 sm:p-8">
-            <div class="mb-8">
-                <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Academic & Personal Information</h2>
-                <p class="text-gray-400">Manage your personal and academic details.</p>
-            </div>
-            
-            <div class="flex flex-col lg:flex-row gap-8">
+      <header
+        class="h-20 flex-shrink-0 flex items-center justify-between px-4 sm:px-8 bg-dark-bg/60 backdrop-blur-xl border-b border-dark-border z-10">
+        <div class="flex items-center gap-4">
+          <button id="open-sidebar-btn" class="md:hidden text-gray-300 hover:text-white"><i data-lucide="menu"
+              class="w-6 h-6"></i></button>
+          <h1 class="text-xl sm:text-2xl font-bold text-white">Student Profile</h1>
+        </div>
+        <button class="flex items-center gap-2"><img
+            src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAMAAzAMBIgACEQEDEQH/xAAcAAEAAQUBAQAAAAAAAAAAAAAABQEDBAYHAgj/xABCEAACAQMCAwUFBQUHAwUBAAABAgMABBEFIQYSMRNBUWFxByIygZEUQlKhsRUjgpLwM1NicqLB0STh8Rclk7LSFv/EABkBAQADAQEAAAAAAAAAAAAAAAABAgMEBf/EACERAQACAgICAwEBAAAAAAAAAAABAgMREiExQQQTUSIU/9oADAMBAAIRAxEAPwDuNKUoFKUoFKUoFKUoFKUoFKVSgrSqVWgUpSgUpSgUpSgUpSgUpSgUpSgUpSgUpSgUpSgUpSgZqM13W9P0Gxe81KcRogJCjdnPgq9SaweNtcTh/Q5bySRlZmWKJUGWd26AfmT4AE1xa74gW4vGQyzSqVIeW49+R1HvnJ7slVGBsObv3qNrRG03xD7S9VmuwYftOmW+OaOGMRGTl8XZidz4AbedQNtxPxJqF4sWm6tq8shG+ZuYfMe6BWu3Uj6rPEyBVlkLZ53CqB4sx2AA7zity0+/ttC01YbK2WZsAySLMjc/+I8pO35UmekxHuW16Xr3Fdnp4GoahYzyruc27MfQtzAH5AV5h9raW862+pWcEgHxy20pGP4SCPqwrmus8UX+oFoklCRHYiMY5hUdaW7W7h39wruodf8A9EflkVMRMR2jz4fUelaja6pYRX1hMs1tMoZHXvrLyK+cNK4kuLOQCwunhA/uzyjz8yfML61vY9pV3DaQRzLZPdc655ZcmRduowOU48iT3Cq7OEuq0qN0DWbTXNMjvbInkYlWRviRh1U+dSVWVKUpQKUpQKUpQKUpQKUpQKUpQKUpQKpVaUHF/bHryXWrQ6Skci/s7965JGHdxgYHkud/8VcsdyHl3xzcw9K232nmSLi/WO2By864PkERl/4rU4YXu7kRRDmLtsoov60yomS200s28twwB8ezBzj5sB9BXmNiyPdbqFICgePcB5V4v3D3TgcvJCBGuDkbbfrmrt8rRJBApBRF5ifxFt8/TFRprXJPj0sRcwIeMZbOAMdf66VMW2mX95bF7azRIs8uRgZ2znfqN6jIh2kKRQRu8245VG+zZH9eldF0VJI9LtUmXlkCe+n4Sd8VnmvwjpbDi5z2008L6oi8+IcDfdz/AMVFXcNzbXbrcB0nyGz0JPiDXVQBzZFaxxfYGXWNN/dPIrWzSSooyWAbZR/iY8qgeLCs8Wab21LTNhildwnfY3cy3WpyW0uoyKI8T9jgntSoK7t4AMMj0rtCjArlvsz4IvtFvoNR1LliuFicPEozyk4wCe87HOPKupDpXS4pVpSlEFKUoFKUoFKUoFKUoFKUoFK8scbnp31qWu+0DSdIjdkzchG5GlDBIg3hznqf8obHfU6G30rSeG/aTo+tRv2skdrMjbgMzoR48xVSB6qPnUqOMdJlMv2Jp72OEZkmtYWeNf4/hPyJpqUbhy/26w2yavBcLFKk06CJ2I9yTk94MPDAbHn5cu+hSStpdnFDbALeXS5kk740/CPA77nrjOMcxrr3tWksNf4TeTT1FxcRuQVwUkjBXm5sHBA/djPkDXHNUnhvLiG7gYlXiUSKQRyNy4xv+vSkLemEiyKOcuOzBw+O70qXQrP2XIo5ZUMPqce7+g+lRBZ5ibeGJmDkAYX3j16VKWki29ijMuWMylQO8jP60vqIWx97bFo+raRaRR27xTWhwPemT49uvMKnZdWsY41dZu05hzBYUMhx44XNIrBJLOOGdUl5Y1XDLkHAxUZxJpNvFOlzw1YCwkAHMYp2XJ79ieUemK4d1tZ6H90r1G0vZXdvqJWO2kImO4jkBRh8jW3aFw5LJdG6mnMF9YzhoWTDqUaNeaNx3rkZ6gggEGtAtNIuNU4ck1jia+umTk57UJjtJWyAnIem5YYznPTbGa232cX+syXcdo1wbiyTmErTIoYhVIyCu/Nzcg3JBAbwrXH8ea35bcuXPN66dKAz/wCK9gYGBVF6VWuhzFKUoFKUoFKUoFKUoFKUoFUPSq1buJVggeWQgIilmJ7gKDUPaNqwtNNFqshBkBkmCnGYx90nu5mKjzGa5Rxp9p4otdIGgQxT21tbAz28ThXilPxcykg8vgRmrvGWvyXupzNKxKtIC+B08F9AMfPNajPKttP2tncFSDzbNgg+tbRGmXmWRY29hpLxz6jLBez9fs0cmUHkzL1Ppt61sV5xvY3kAhOlTW0ZQxlbW4wpXvypyD9KhxxJFe+9rMC3nd2+AJB/H1+uaxJoIJyZLGRZIurJKgVh8xUiQ0y5KXrSQXk08IjzAJG3WQ7HOTgEKT02bHpWLqOlh4ENuw7UZJAXAwe7HdUf9oNu6ZV4U/Cx2bzBrZtBvYpSYiFLMevXPh9f1rDLNo7h14IpaOMtZtmubIvIV2kQx82Nx448KkNIuEku7SOaKPlWTm5ie/rt88VK6tZfaNKZ0H7yMsceOGNatE+CM4x591U5c4X4/XbTrVkebO3w1cvbP9oW72oPKZRy83r31p/D3EzQiO1vMFCQFmPUeTVJ6rrVxLIItMtmmiDe9MM8o8Rt1x9K4Zx2iz0IyVmjPbUZtUkt0lUCCyURwLFHyRnlGObqfPGcdTXTuE7aOLTRIq4kY4YlcdOg/P8AOtB9m+j6xc6q13fpF+yVidRGrEBZcgDlUgY2B8t/p1aCJIY+SMYGc12Y6zHcy8zJaNcYhcG1KUrViUpSgUpSgUpSgUpSgUpSgVAceyPFwfqkiKWCwEyAdeT7/wDpzU8elQvFGrLpen+6Ea4nzHEsgyvTdmH4QPrsO+pjyifHb5ssba+167dbMmUFiZJGOEXJzk469elbDbWXD2jvyyf+5XwGSOz7QKfJeg/WsvUJLW1tuyDNbWhGRbQ4SSfzYj4FPgB08KgZLySYFICLWL7sVuOUD18T5muiOnPvl48Mu91S0kumMVqlm7jkPPDyMV8ckb5/2qKnt2icPaHkIHwDZWq8IuTLyM8m3RzmrSOEVuT+zBHaJ1xnByPDY1ErxCza3MPM6yR9lI/uujfCT6dKyLKNbG+juI8gA4dRtkd+B41j6nbc69qp99NjjoV/7f8ANY9pdsjpE/vIxx73UfPwqsxE9StW01nbp2laDc3+l3F3B7xV+ZYsbtGwzkZrn2v6TPpV/LHLEygMev3flXQvZ9xLb6RZXr6teJFYwwqYz1bIY5UeJ3XAqIuuJ9R491lbG1t/smnM/J2Q/tJS2yl2G+3xcoOMLuTXHSuSuSY106rZYtXto0Ts7KgLE+RrdbHXZLfTdP0vSb17N5pUiu5okzMi+K/XrW8a17JtPuH7TRr24sTtzwnDI5HfzEZDd+d81Had7LrxtWM91dRR2sbgRrEPeIXYb/L61eaRaY2VyarMNwu9Z0/g3RLSS9nkmsG5YoJwC8ruRn3u9iQGPN5HNbJYXUN9aRXVtIJIZVDIw7xWHqGh6bqmlDTNQtVntBy4RsggjoQRgg+YrMsbS3sbSO1tIxHBEOVFG+B86uxZFKUoFKUoFKVRmVVLMwAHUk9KCtKorKwypBHiDVaBSlKBSlKCh6Vw/wBo3Er3WuTNbuTBbf8ATx+DnOW/MZPoo766xxdqy6Lw7e3xPvqnJGPF2PKo+pFcCuWs7yIRNKweMnLkfE33jt4mr0j2pf8AGAS925cktndmO+aADGVGB4VnaaSZTBGgK8pyc5B8N6xWUqSpG42O9aKeluZj9mfzGBUe78pRwSFlj7NvIj/sR9Kyr18IqKfu1hYLqid3aBvQd9QmElGS0XK+CV90+f8AQxWJHAjtLZye6c80TgbrWSjh5JOU7Bip+X/mksf761lAOQ3I3p3H/apGCsMkglsublyyN7/wxtnlJJ7hhsnyFTulanBpUlpc6exd7eduxCgjtXAOHbPTmxy+QbpUNqUvJckRnrzBiD1/rArxEeSKEjorqfyNNJfU+kajb6rpdrqNq2YLmISr5AjOD4Ed47jV+xObWNj1ccx9Tua597JrxpuDNQtsti3lk7PJ6K683/2LV0SHaNAO5RWMtFylKVAUpSgUpSgp3VpXtM1n9mafbwxTNFNJIHUp3BWB3HeMc23eQK3U9K417Sr/AO2cSSoGyltGIl8ObvqJ8Jjy8WvG2qRHmYRSkjrycp+qkVKf+pN1bw5a2DuBuGk90D6ZP81aOMRqATkkVW1sm1S/t9NGT9qlWJsfhPX8smqbacYd80K//amj2eodm0YuYVlCMMEAjI27tqkKtwxrFEsSABEAVQB0AFXK0ZFUPSq1Q9KDn3tYnDxaTpvPyCaaS4kPdyRrjf8AikU+oFc4s9Lhvyh7LsbaIYZ1O7/4R/ua3fjC6t9Wnu5rhwtqqGGNv8AO5H+Zh9Atc71bX4HZIIW7G2iGI0jGNvlW8RqrCbcp1DYrvsVsnVYE7FBnshtn1Pea1q8mikKdlH2QAxisNdSgk9wXJwe4sRmrnKjrju7iDRKxcwhxzfSsLHZIzH7hVh9RUmOvKw7qjr0gxvEOrbD60lML2lYbm5j8ZDH6n/tWdcQjsSgILkZ2O2QcqfrWFacgjVVG3vZPj8NZKnBBHdRE+WBLhrtXHwPHzBcfX8qpaGNVjM680a/EPHCtVZHWC/A6oo/XJxWPsLRFXcBgB6DNNrQ7R7Ib2O70jWoSVF8zmWSJRjAcFhjyyxrp1uweFGU5BUEGvnn2c6sNLu3vBIe1imDSDPxwEcrD5DB/hrvegypPo9lMjh1eFSGHQ7VlaNLVZ9KUqqxSlKBSlKCzczpbW8s0hCrGhYk+AGa4Dqsoubi4uZCOeWQv13yT0+W4+Vdf4+vhZcOzg7mc9njxGCzD5gEfMVw5iSxJ3PjWeSdQ1xx2vc229bd7J9ON3xBJeOCY7WLIyNudth+Wa0uWQCMEgknYAV2T2V6cbPhlbmT+0vJDJn/ADhf0J+dRXudpt1Gm4gYqtKVqxKjdfnli0yVbfHbzYijyejNtn9akj0rAvLf7XcRAnAiUv6E7D8s0HIOI9A1G+uTDzn9mxNyr2Zw0rDbJHcvh86jDwvJETHDCIuXYnkDfmTXYL6CCFGxzE4+6dq1i8u7W2hkkuZAEQZOd/wCjWk22pWNRpyvUNLjjmaCch3HcyCo17KWzLPavzKD/AGZ6H0qb13V9O1BnlGn3UignknBEfLjphjWvJetJG6mTJXYkY6VMIlIRt20cUoyvMNwe7uP51E3Mx+0OF+FB18T31mW8wSOQtjYBm9eh/TPzqLhPO2/ec+tTJCR09jsrdQc59etZ2N6jIm5ZFI8akwRgE/pUwiWFD71+Dtk82cjPlWNKf+mQ/icHb0rIhBTVHB6DLfWrFxG0UMEbDBB2BPUctQlWxuXsrhJ49uT9K+gPZbqER0CPTQ7M1tzPCW+/CzFlx/lzykdRgeIr53ZhuoPTqfCt14I4subG+torG0LwROXmkUH3VPxE+XT8qiY3B4fRKnNVqLueINHs4RNd6rZQRkA8006r16dTWUNQtOwW4+1QdiwBWTtBykdxzWTRlUq1DPHPGskDpJGwyGU5B+dXMnvoK0qmaoWABLbAdTQcz9r94eztLdG+KUR8oO+Mc7n5YiH8Zrm1bL7Q783vESxnmxBFkg9AznmP+kKPlWrTSCOIt31jfu2nRjjVSC3m1HUYbO1OJpHESHGeVmOAfQZz8q+k7C1isbOC0tl5YYI1ijXwVRgD6CuLeyDTBfcTG7cZSzQyfxkco/VvyruArWsaZ5J7VpSlSzK8lRucbnrXqlBrmsArEy4xud651xFYye9PeXSpZpkt2hxFHt1YDeRjnZen+/VdXhDpkDLVofEvD8up3FjI5Y29rKZWtvuynHu/n/W9Wr5RLRY9EsyFvdRMkNvgNHHJ70rqehbHex2WNepPhmpDi+y0u5sLW0stLhtrudg3aKo5reJfiJx1O4Hqak10yeW6E16yyTl+ibrCMb4Pe2Nubu6DFWbWyuZZ9SvLteXtP3FvF+GNe/5nf0xV1IaHqNjFFedhBI4gmUk825AHn55qNNm8UgGcBpDGpZe8dM1M3kEkmrO77RQgIh7nPXPpv+VWLzkCpCMk864z3nOamEMBYZ2DFAhZThl5t1PmK9wyXayGPBeQDJjJxkeI8ayry2JuI54TyyfASO/wz+nzrFu2zPDKuQwAbH61IvQW8lxfxtO4t0chHI3ZV6c3htVI9Lu9Tu47Szk7WXlZlDYXp13JFZV3yqJ0BBxEwbbqCKiobhoo4JEdkeKTmVgcEA9cH5mgloeFdQlLxxtadouf3ZnjJJ8DhiQflUtonBXFV9aR3Fpa9lDn92wukQncg55SSCDtjxBzuMVDsgYAEAg9c1s/CnFeoaZcy2yzc8U371Q2NmACn6jHz36kmsc83pTlSGuKsXtxTGncD8UQAZi0qOTlIaWWZpW36/d3+te24OGiWiz3KtfSdoWdLexzHGBvgJ7zDfw64qZh4zYb3Frlj3o3+1R+oakNRDMGv7dPxJdsPy6Y+Yrzf9fyb21Mah1x8OK+YeLG71Czt7hbG4uIklbnSFgbfBPkU2HrXmx4k4wjnCfui495+2u4njC+IIycfn5VaN/Ja25aPUtRyvUSTMQx9QSKjLXVhfXJ7a6uXuF90pLIe0UdcrvuD3gGt/uya9H+anqXRDxzCkCdvNZJMFHaCIvMvN34OFrFl47hnxAk0LNKeTH2dxsR5tttneuY6rHorTGJri80246qVkEsT+hO4HiOoqJ0yM2t5qPY3ovIoouzinRSFdpMAbHwBY/KtKcrRval6Ur0z7q6+33t1ekYE8zOv+X7v5AfOo2+ly3Ip+GsxyIo+YHAAwBUYqPPPHHGOaWaRUQfiYnCj64qaf1ba3iHbvY3pf2Php7x1xJeyl/4R7o/Q1v1Yek2Uem6ba2MPwW8SxjzwMZrLJrVzT3KtKoDn0qtEFKUoLdwoaI81QeqlTbjswBg7+NTssYlQo2cHwrHnso5gckjO1BpiwRdoJAoBxjYDfyrW+LZ7mECOJGELDdwNvSugTcOyZJguFwe5lxioy80mcc8Mkcci4wSDt+YqeWvKNfjjsrZzmsZolaQOd2HTPdXS73gYyYaK0jGegWUrjPoCPrUOeBb9JuUdkVB+BpCSfmFFW+yv6rwt6aczKPiPKD1NWLiyMkUEnLhnky2TuFrdNX4Ce+tkSOS3tZ1PxLzlfQisOP2famsPZtrMHT4vszMV9DzCqT8nFHteMGSfTTXlDJdy5zlSAB3jG1Y3YNNFDa26c8pPKqdCzGt5X2ZS79pre2PuWX+5c15j9mdzBOk8GsjnQ5DNa9P9VRPysf6tHx7/iJj4Z4mdc/ZLYHPR50BP51l6fwxxNa3izPp1jK3IVAa6QKu4OevlUwODtcGy67D87Mf81Zl4Z1mHAbXrHOdla26/QHeqTnpaNbXrhtWd+3q6seKwv8A0+kaeHP3xdox+VWv2HeXQDavw7xBPIDhhDqsQQjxACjFWpuGeIJeyKS288scnOjNAYgp6Z98Dx7s17fhTiuTHNqWnEDfkZnIH+nb5VWtsVfEr3nJb9YEvDWoMWey4f1HT2DEIftZmf1JyFx5YNWX0TiOZYo7vQboyA5jnj5UkX6HHWpYcKa6AVaS2VnUqWhupSoBH4GG/wDMKxpOF9fjVUWdRErEgsJiR/8AG77f1ir88U+1Y+yryOGeI9Uit0u9Lcy83vStCCWwAM4OwODuehx3bYsX2lHQ5GsJ+zE/a9rLyEeHKvT1k7+6rx0vie2meeOWGR368zyqv8jsMfSsGTh3iueYmS2mYt3xR5OPDIO4q38zGqq7tvdmLeSpjkkZYlG+WO5+XWmm3zadf2uo2dqLl7SRZk7c4jdh5DfruDnqBtWevAGvKhkOj3k5PTm93B8xnNUbhDiZVAfS7lEH3Ujzj+vSprFYTM2s2Zva7rjMBNZ2NrGfieLMrj0DFR9c+le4+ONNvRH9v/aOpSHZv2hc9jBj/FHGAjD+Fq1WLhXU03bS7rPeWhJ/Wr//APO3uN7C4B/yGoniRV3nhe5t7vQrSa0FqICpCC0GIhhiMLsNhjwqVrVvZjEYOCrCBgQ8bTKynqD2r7GtpqYZz5KUpRBSlKBVCM1WlB5wPCqFATnlFe6VGhbMafgX6U7JPwL9KuUpqDbxyJ+BfpVOzT8C/SrlKag2t9mn4F+lUWGNc8sSDJ3wvWrtKag2tdjH3xp/KKdhD3xJ/KKu0pqE7lZNvB/cp/KKp9lg/uY/5av0qOMfhuWP9kt/7lPpV8DFVpUxER4RtSlVpU6Hgop6qD61be2gf4oVPyq/So1BuVi0tYbSMxW8axoWZyFHexJJ+pNXqrSpH//Z"
+            class="w-10 h-10 rounded-full border-2 border-primary" alt="User Avatar"></button>
+      </header>
 
-                <!-- Left Column -->
-                <div class="w-full lg:w-1/3 lg:max-w-xs flex flex-col gap-8">
-                    <div class="bg-dark-card/80 backdrop-blur-lg border border-dark-border p-6 rounded-2xl text-center">
-                        <img src="https://i.postimg.cc/XJ8K3vZ7/user.png" alt="Profile Picture" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-primary shadow-lg">
-                        <h3 class="text-2xl font-bold text-white">M. Zohair</h3>
-                        <p class="text-gray-400 mb-3">STUA44RCA</p>
-                        <span class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-900 text-emerald-300 text-sm font-semibold rounded-md"><span class="h-2 w-2 rounded-full bg-emerald-400"></span>Active Student</span>
-                    </div>
+      <main class="flex-1 overflow-y-auto p-4 sm:p-8">
+        <div class="mb-8">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Academic & Personal Information</h2>
+          <p class="text-gray-400">Manage your personal and academic details.</p>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8">
+
+          <!-- Left Column -->
+          <div class="w-full lg:w-1/3 lg:max-w-xs flex flex-col gap-8">
+            <div class="bg-dark-card/80 backdrop-blur-lg border border-dark-border p-6 rounded-2xl text-center">
+              <img
+                src="data:image/jpeg;base64,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"
+                alt="Profile Picture" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-primary shadow-lg">
+              <h3 class="text-2xl font-bold text-white"> Zohair</h3>
+              <p class="text-gray-400 mb-3">STUA44RCA</p>
+              <span
+                class="inline-flex items-center gap-2 px-3 py-1 bg-orange-900/50 text-orange-400 border border-orange-500/20 text-sm font-semibold rounded-md"><span
+                  class="h-2 w-2 rounded-full bg-orange-500"></span>Active Student</span>
+            </div>
+          </div>
+
+          <!-- Right Column -->
+          <div class="w-full lg:w-2/3">
+            <div class="bg-dark-card/80 backdrop-blur-lg border border-dark-border rounded-2xl p-6">
+              <div class="flex justify-between items-center mb-4 pb-4 border-b border-dark-border">
+                <h3 class="text-xl font-semibold text-white">Personal Information</h3>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6 text-sm">
+                <div>
+                  <p class="text-gray-400">User Account</p>
+                  <p class="font-semibold text-white mt-1">zohair12</p>
                 </div>
-
-                <!-- Right Column -->
-                <div class="w-full lg:w-2/3">
-                    <div class="bg-dark-card/80 backdrop-blur-lg border border-dark-border rounded-2xl p-6">
-                        <div class="flex justify-between items-center mb-4 pb-4 border-b border-dark-border">
-                            <h3 class="text-xl font-semibold text-white">Personal Information</h3>
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6 text-sm">
-                            <div><p class="text-gray-400">User Account</p><p class="font-semibold text-white mt-1">m.zohair12</p></div>
-                            <div><p class="text-gray-400">Full Name</p><p class="font-semibold text-white mt-1">M. Zohair</p></div>
-                            <div><p class="text-gray-400">CNIC</p><p class="font-semibold text-white mt-1">34101-1234567-8</p></div>
-                            <div><p class="text-gray-400">Designation</p><p class="font-semibold text-white mt-1">Student</p></div>
-                            <div><p class="text-gray-400">Father's Name</p><p class="font-semibold text-white mt-1">Father's Full Name</p></div>
-                            <div><p class="text-gray-400">Moodle ID</p><p class="font-semibold text-white mt-1">STUA44RCA-moodle</p></div>
-                            <div><p class="text-gray-400">Email Address</p><p class="font-semibold text-white mt-1">m.zohair@example.com</p></div>
-                            <div><p class="text-gray-400">Phone</p><p class="font-semibold text-white mt-1">+92 300 1234567</p></div>
-                            <div class="sm:col-span-2"><p class="text-gray-400">Address</p><p class="font-semibold text-white mt-1">123 University Road, City, Country</p></div>
-                        </div>
-                    </div>
+                <div>
+                  <p class="text-gray-400">Full Name</p>
+                  <p class="font-semibold text-white mt-1">zohair</p>
                 </div>
+                <div>
+                  <p class="text-gray-400">CNIC</p>
+                  <p class="font-semibold text-white mt-1">34101-1234567-8</p>
+                </div>
+                <div>
+                  <p class="text-gray-400">Designation</p>
+                  <p class="font-semibold text-white mt-1">Student</p>
+                </div>
+                <div>
+                  <p class="text-gray-400">Father's Name</p>
+                  <p class="font-semibold text-white mt-1">Father's Full Name</p>
+                </div>
+                <div>
+                  <p class="text-gray-400">Moodle ID</p>
+                  <p class="font-semibold text-white mt-1">STUA44RCA-moodle</p>
+                </div>
+                <div>
+                  <p class="text-gray-400">Email Address</p>
+                  <p class="font-semibold text-white mt-1">m.zohair@example.com</p>
+                </div>
+                <div>
+                  <p class="text-gray-400">Phone</p>
+                  <p class="font-semibold text-white mt-1">+92 300 1234567</p>
+                </div>
+                <div class="sm:col-span-2">
+                  <p class="text-gray-400">Address</p>
+                  <p class="font-semibold text-white mt-1">123 University Road, City, Country</p>
+                </div>
+              </div>
             </div>
-        </main>
+          </div>
+        </div>
+      </main>
     </div>
-</div>
+  </div>
+
+  <!-- Techmire Solutions Notification -->
+  <div id="techmire-notification"
+    class="fixed bottom-8 right-8 z-50 transition-all duration-500 transform translate-x-0">
+    <div
+      class="bg-dark-card/90 backdrop-blur-xl border border-primary/30 p-5 rounded-2xl shadow-[0_0_30px_rgba(241,102,17,0.15)] max-w-xs flex gap-4 items-start relative group overflow-hidden">
+      <div
+        class="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000">
+      </div>
+      <div class="p-2 bg-primary/20 rounded-lg shrink-0">
+        <i data-lucide="code" class="w-5 h-5 text-primary"></i>
+      </div>
+      <div class="pr-6">
+        <h4 class="text-white font-semibold text-sm mb-1">Project Info</h4>
+      </div>
+      <button
+        onclick="document.getElementById('techmire-notification').style.opacity='0'; setTimeout(() => document.getElementById('techmire-notification').style.display='none', 500);"
+        class="absolute top-3 right-3 text-gray-500 hover:text-white transition-colors">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+    </div>
+  </div>
 
   <script>
     lucide.createIcons();
@@ -133,9 +223,10 @@
       sidebar.classList.add('-translate-x-full');
       sidebarOverlay.classList.add('hidden');
     }
-    
+
     closeSidebarBtn.addEventListener('click', closeSidebar);
     sidebarOverlay.addEventListener('click', closeSidebar);
   </script>
 </body>
+
 </html>
