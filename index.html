@@ -3,8 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale-1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TMS Portal - Login</title>
+    <link rel="icon" href="f.icon.webp.webp" type="image/x-icon">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script> <!-- Modern Icons -->
@@ -77,7 +78,7 @@
             <div class="bg-dark-card/80 backdrop-blur-xl border border-dark-border rounded-2xl p-8 shadow-2xl">
                 <!-- Header -->
                 <div class="flex items-center justify-center mb-8">
-                    <img src="logo.png" alt="Logo" class="w-12 h-12 mr-4 rounded-full">
+                    <img src="logo.webp" alt="Logo" class="w-12 h-12 mr-4 rounded-full">
                     <h1 class="text-3xl font-bold text-white">TMS Portal</h1>
                 </div>
 
@@ -115,7 +116,6 @@
                             class="w-4 h-4 text-primary bg-dark-border rounded border-gray-600 focus:ring-primary">
                         Remember me
                     </label>
-                    <a href="#" class="font-medium text-primary hover:underline">Forgot password?</a>
                 </div>
 
                 <!-- Error Message -->
@@ -126,6 +126,7 @@
                     class="w-full py-3 border-none rounded-lg bg-primary text-white text-base font-semibold cursor-pointer transition-all duration-300 hover:bg-primary-dark active:scale-[0.98]">
                     Login
                 </button>
+
             </div>
         </div>
     </div>
@@ -157,14 +158,13 @@
                 class="absolute top-3 right-3 text-gray-500 hover:text-white transition-colors">
                 <i data-lucide="x" class="w-4 h-4"></i>
             </button>
-
         </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js"></script>
     <script>
-        lucide.createIcons(); // Initialize Icons
+        lucide.createIcons();
 
         // Password visibility toggle logic
         const passwordInput = document.getElementById('password');
@@ -187,9 +187,9 @@
             const role = document.getElementById('role').value;
 
             if (role === 'admin') {
-                window.location.href = 'tms-portal-for-admin/admindashboard.html';
+                window.location.href = 'admindashboard.html';
             } else {
-                window.location.href = 'adduser.html'; // Student Portal
+                window.location.href = 'userprofile.html';
             }
         }
 

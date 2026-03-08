@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TMS Portal - Change Course Enrolment</title>
+  <link rel="icon" href="f.icon.webp.webp" type="image/x-icon">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'], },
+          colors: {
+            primary: '#F16611', 'primary-dark': '#D95A0E', 'dark-bg': '#0D1117',
+            'dark-card': '#161B22', 'dark-border': '#30363D',
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* Custom Styles */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #0D1117; }
+    ::-webkit-scrollbar-thumb { background: #30363D; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #F16611; }
+
+    body::before { /* Aurora Background */
+        content: ''; position: absolute; inset: 0;
+        background-image: radial-gradient(circle at 15% 15%, #F1661120 0%, transparent 25%),
+                          radial-gradient(circle at 85% 75%, #4f46e520 0%, transparent 25%);
+        filter: blur(60px); z-index: -1; animation: subtle-move 20s infinite alternate;
+    }
+    @keyframes subtle-move { from { transform: translate(0, 0); } to { transform: translate(20px, -30px); } }
+    #manage-users-btn[aria-expanded="true"] #arrow-icon { transform: rotate(180deg); }
+    #arrow-icon { transition: transform 0.2s ease-in-out; }
+
+    /* Filter Sidebar Transition */
+    #filter-sidebar { transition: transform 0.3s ease-in-out; }
+    
+    /* Custom Select for Filters */
+    .filter-select {
+        background-color: #0D1117;
+        border-color: #30363D;
+        color: #d1d5db;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+        background-position: right 0.5rem center;
+        background-repeat: no-repeat;
+        background-size: 1.5em 1.5em;
+    }
+  </style>
+</head>
+
+<body class="font-sans bg-dark-bg text-gray-300 overflow-x-hidden">
+  <div class="relative min-h-screen md:flex">
+    
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 z-30 md:hidden hidden"></div>
+    
+    <!-- =========== ADMIN SIDEBAR START =========== -->
+    <aside id="sidebar" class="w-64 flex-shrink-0 bg-dark-card/80 backdrop-blur-xl border-r border-dark-border flex-col
+                             fixed inset-y-0 left-0 z-40 md:relative md:translate-x-0
+                             transform -translate-x-full transition-transform duration-300 ease-in-out">
+            <div class="h-20 flex items-center justify-between px-6 flex-shrink-0">
+                <a href="#" class="flex items-center gap-3"><img src="logo.webp" alt="Logo"
+                        class="w-10 rounded-full"><span class="text-xl text-white font-bold">TMS Admin</span></a>
+                <button id="close-sidebar-btn" class="md:hidden text-gray-400 hover:text-white"><i data-lucide="x"
+                        class="w-6 h-6"></i></button>
+            </div>
+
+            <nav class="flex-1 px-4 py-6 space-y-2">
+                <a id="dashboard-link" href="admindashboard.html"
+                    class="flex items-center gap-3 px-4 py-2.5 text-gray-400 hover:text-white rounded-lg transition-colors">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+                </a>
+                <!-- Manage Users -->
+                <div>
+                    <button onclick="toggleDropdown('manage-users-panel', 'manage-users-icon')"
+                        class="w-full flex justify-between items-center gap-3 px-4 py-2.5 text-gray-400 hover:text-white rounded-lg transition-colors">
+                        <span class="flex items-center gap-3">
+                            <i data-lucide="users" class="w-5 h-5"></i> Manage Users
+                        </span>
+                        <i id="manage-users-icon" data-lucide="chevron-down" class="w-5 h-5 transition-transform duration-200"></i>
+                    </button>
+                    <div id="manage-users-panel" class="pl-6 pt-2 space-y-1 hidden">
+                        <a id="changeuser-link" href="changeuser.html"
+                            class="flex items-center gap-3 px-4 py-2 text-sm text-gray-400 hover:text-white rounded-lg transition-colors">Change
+                            user</a>
+                        <a id="adduser-link" href="manageusers.html"
+                            class="flex items-center gap-3 px-4 py-2 text-sm text-gray-400 hover:text-white rounded-lg transition-colors">Add
+                            user</a>
+                    </div>
+                </div>
+
+                <!-- Course Enrolments -->
+                <div>
+                    <button onclick="toggleDropdown('enrollment-panel', 'enrollment-icon')"
+                        class="w-full flex justify-between items-center gap-3 px-4 py-2.5 text-gray-400 hover:text-white rounded-lg transition-colors">
+                        <span class="flex items-center gap-3"><i data-lucide="bookmark" class="w-5 h-5"></i> Course
+                            Enrolments</span>
+                        <i id="enrollment-icon" data-lucide="chevron-down"
+                            class="w-5 h-5 transition-transform duration-200"></i>
+                    </button>
+                    <div id="enrollment-panel" class="pl-6 pt-2 space-y-1 hidden">
+                        <a href="changecourseenroll.html"
+                            class="flex items-center gap-3 px-4 py-2 text-sm text-gray-400 hover:text-white rounded-lg transition-colors">Change
+                            enrolment</a>
+                        <a href="addcourseenroll.html"
+                            class="flex items-center gap-3 px-4 py-2 text-sm text-gray-400 hover:text-white rounded-lg transition-colors">Add
+                            enrolment</a>
+                    </div>
+                </div>
+
+                <!-- Courses -->
+                <div>
+                    <button onclick="toggleDropdown('course-panel', 'course-icon')"
+                        class="w-full flex justify-between items-center gap-3 px-4 py-2.5 text-gray-400 hover:text-white rounded-lg transition-colors">
+                        <span class="flex items-center gap-3"><i data-lucide="book" class="w-5 h-5"></i> Courses</span>
+                        <i id="course-icon" data-lucide="chevron-down"
+                            class="w-5 h-5 transition-transform duration-200"></i>
+                    </button>
+                    <div id="course-panel" class="pl-6 pt-2 space-y-1 hidden">
+                        <a href="changecourse.html"
+                            class="flex items-center gap-3 px-4 py-2 text-sm text-gray-400 hover:text-white rounded-lg transition-colors">Change
+                            course</a>
+                        <a href="addcourse.html"
+                            class="flex items-center gap-3 px-4 py-2 text-sm text-gray-400 hover:text-white rounded-lg transition-colors">Add
+                            course</a>
+                    </div>
+                </div>
+
+                <!-- Exams -->
+                <div>
+                    <button onclick="toggleDropdown('exam-panel', 'exam-icon')"
+                        class="w-full flex justify-between items-center gap-3 px-4 py-2.5 text-gray-400 hover:text-white rounded-lg transition-colors">
+                        <span class="flex items-center gap-3"><i data-lucide="file-text" class="w-5 h-5"></i>
+                            Exams</span>
+                        <i id="exam-icon" data-lucide="chevron-down"
+                            class="w-5 h-5 transition-transform duration-200"></i>
+                    </button>
+                    <div id="exam-panel" class="pl-6 pt-2 space-y-1 hidden">
+                        <a href="changexam.html"
+                            class="flex items-center gap-3 px-4 py-2 text-sm text-gray-400 hover:text-white rounded-lg transition-colors">Change
+                            exam</a>
+                        <a href="addexam.html"
+                            class="flex items-center gap-3 px-4 py-2 text-sm text-gray-400 hover:text-white rounded-lg transition-colors">Add
+                            exam</a>
+                    </div>
+                </div>
+
+                <!-- Students -->
+                <div>
+                    <button onclick="toggleDropdown('student-panel', 'student-icon')"
+                        class="w-full flex justify-between items-center gap-3 px-4 py-2.5 text-gray-400 hover:text-white rounded-lg transition-colors">
+                        <span class="flex items-center gap-3"><i data-lucide="graduation-cap" class="w-5 h-5"></i>
+                            Students</span>
+                        <i id="student-icon" data-lucide="chevron-down"
+                            class="w-5 h-5 transition-transform duration-200"></i>
+                    </button>
+                    <div id="student-panel" class="pl-6 pt-2 space-y-1 hidden">
+                        <a href="changestudent.html"
+                            class="flex items-center gap-3 px-4 py-2 text-sm text-gray-400 hover:text-white rounded-lg transition-colors">Change
+                            student</a>
+                        <a href="addstudent.html"
+                            class="flex items-center gap-3 px-4 py-2 text-sm text-gray-400 hover:text-white rounded-lg transition-colors">Add
+                            student</a>
+                    </div>
+                </div>
+            </nav>
+            <div class="px-4 py-6"><a href="index.html"
+                    class="flex items-center gap-3 px-4 py-2.5 text-gray-400 hover:text-red-400 rounded-lg transition-colors"><i
+                        data-lucide="log-out" class="w-5 h-5"></i> Log Out</a></div>
+        </aside>
+    <!-- =========== ADMIN SIDEBAR END =========== -->
+
+    <!-- =========== MAIN CONTENT START =========== -->
+    <div class="flex-1 flex flex-col max-h-screen overflow-hidden">
+        <header class="h-20 flex-shrink-0 flex items-center justify-between px-4 sm:px-8 bg-dark-bg/60 backdrop-blur-xl border-b border-dark-border z-10">
+            <div class="flex items-center gap-4">
+                <button id="open-sidebar-btn" class="md:hidden text-gray-300 hover:text-white"><i data-lucide="menu" class="w-6 h-6"></i></button>
+                <h1 class="text-xl sm:text-2xl font-bold text-white">Select Course Enrolment</h1>
+            </div>
+            
+            <!-- Desktop Buttons -->
+            <div class="hidden md:flex items-center gap-3">
+                 <button onclick="exportTableToCSV('enrolments_list.csv')" class="flex items-center gap-2 px-4 py-2 bg-dark-border text-gray-300 text-xs font-semibold rounded-lg hover:bg-dark-border/70 hover:text-white transition-colors border border-dark-border whitespace-nowrap">
+                    <i data-lucide="download" class="w-4 h-4"></i> Export All
+                </button>
+                <!-- Fixed Add Button Width/Wrap -->
+                <a href="addcourseenroll.html" class="flex flex-shrink-0 items-center gap-2 px-4 py-2 bg-primary text-white text-xs font-semibold rounded-lg hover:bg-primary-dark transition-colors shadow-lg shadow-primary/20 whitespace-nowrap">
+                    <i data-lucide="plus" class="w-4 h-4"></i> Add Course Enrolment
+                </a>
+            </div>
+        </header>
+        
+        <main class="flex-1 overflow-y-auto p-4 sm:p-8">
+            
+            <!-- Mobile-Only Buttons -->
+            <div class="md:hidden mb-4 grid grid-cols-2 gap-3">
+                 <button onclick="exportTableToCSV('enrolments_list.csv')" class="flex justify-center items-center gap-2 px-3 py-2.5 bg-dark-card text-gray-300 text-xs sm:text-sm font-semibold rounded-lg hover:bg-dark-border hover:text-white transition-colors border border-dark-border">
+                    <i data-lucide="download" class="w-4 h-4"></i> Export
+                </button>
+                <a href="addcourseenroll.html" class="flex justify-center items-center gap-2 px-3 py-2.5 bg-primary text-white text-xs sm:text-sm font-semibold rounded-lg hover:bg-primary-dark transition-colors shadow-lg shadow-primary/20">
+                    <i data-lucide="plus" class="w-4 h-4"></i> Add Enrolment
+                </a>
+            </div>
+
+            <div class="bg-dark-card/80 backdrop-blur-lg border border-dark-border rounded-2xl flex flex-col h-[calc(100vh-140px)] md:h-auto">
+                
+                <!-- Search and Actions Bar -->
+                <div class="p-4 border-b border-dark-border space-y-4 flex-shrink-0">
+                     <div class="flex flex-wrap items-center gap-4">
+                        <div class="relative flex-grow max-w-sm">
+                             <i data-lucide="search" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500"></i>
+                             <input type="text" id="search-input" placeholder="Search enrolments..." class="w-full pl-12 pr-4 py-2.5 border border-dark-border bg-dark-bg rounded-lg outline-none focus:ring-2 focus:ring-primary text-sm">
+                        </div>
+
+                        <button id="filter-toggle-btn" class="flex items-center gap-2 px-5 py-2.5 bg-dark-border text-white text-sm font-semibold rounded-lg hover:bg-dark-border/70 transition-colors">
+                            <i data-lucide="filter" class="w-4 h-4"></i> Filters
+                        </button>
+
+                        <button id="search-btn" class="px-5 py-2.5 bg-dark-border text-white text-sm font-semibold rounded-lg hover:bg-dark-border/70">Search</button>
+                    </div>
+                    
+                    <div class="flex flex-wrap items-center gap-4">
+                        <label for="action-select" class="text-sm text-gray-400">Action:</label>
+                        <select id="action-select" class="flex-grow max-w-xs px-4 py-2 border border-dark-border bg-dark-bg rounded-lg outline-none focus:ring-2 focus:ring-primary text-sm">
+                            <option>---------</option>
+                            <option>Delete selected enrolments</option>
+                        </select>
+                        <button class="px-4 py-2 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-primary-dark">Go</button>
+                        <span id="selection-count" class="text-sm text-gray-400">0 of 29 selected</span>
+                    </div>
+                </div>
+
+                <!-- SCROLLABLE TABLE CONTAINER -->
+                <div class="flex-1 overflow-auto bg-dark-card/50 rounded-b-2xl relative">
+                     <table class="min-w-full text-sm whitespace-nowrap text-left border-collapse">
+                        <thead class="bg-dark-card/90 sticky top-0 z-10 border-b border-dark-border shadow-sm">
+                            <tr>
+                                <th class="p-4 w-4"><input type="checkbox" id="select-all-checkbox" class="w-4 h-4 text-primary bg-dark-bg border-dark-border rounded focus:ring-primary cursor-pointer accent-orange-500"></th>
+                                <th class="px-4 py-3 font-semibold text-gray-400 uppercase tracking-wider text-xs">Serial number</th>
+                                <th class="px-4 py-3 font-semibold text-gray-400 uppercase tracking-wider text-xs">Student</th>
+                                <th class="px-4 py-3 font-semibold text-gray-400 uppercase tracking-wider text-xs">Course</th>
+                                <th class="px-4 py-3 font-semibold text-gray-400 uppercase tracking-wider text-xs">Enrolment date</th>
+                                <th class="px-4 py-3 font-semibold text-gray-400 uppercase tracking-wider text-xs">Deadline</th>
+                                <th class="px-4 py-3 font-semibold text-gray-400 uppercase tracking-wider text-xs">Completion date</th>
+                                <th class="px-4 py-3 font-semibold text-gray-400 uppercase tracking-wider text-xs">Status</th>
+                                <th class="px-4 py-3 font-semibold text-gray-400 uppercase tracking-wider text-xs">Active status</th>
+                                <th class="px-4 py-3 font-semibold text-gray-400 uppercase tracking-wider text-xs">Designation</th>
+                                <th class="px-4 py-3 font-semibold text-gray-400 uppercase tracking-wider text-xs">Extra Time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body" class="divide-y divide-dark-border/50 text-gray-300">
+                            
+                            <!-- Row 1 -->
+                            <tr class="hover:bg-dark-border/20 group transition-colors">
+                                <td class="p-4"><input type="checkbox" class="row-checkbox w-4 h-4 text-primary bg-dark-bg border-dark-border rounded cursor-pointer accent-orange-500"></td>
+                                <td class="px-4 py-4 font-bold text-primary hover:underline cursor-pointer">STUF3474D_CRS2C09AA</td>
+                                <td class="px-4 py-4">S.M.Moosa</td>
+                                <td class="px-4 py-4">Backend Level 1 - Programming with Python</td>
+                                <td class="px-4 py-4 text-gray-400">Oct. 31, 2025</td>
+                                <td class="px-4 py-4 text-gray-400">Oct. 31, 2025</td>
+                                <td class="px-4 py-4 text-gray-400">Oct. 31, 2025</td>
+                                <td class="px-4 py-4"><span class="px-2 py-1 text-xs font-medium bg-sky-900/50 text-sky-300 rounded border border-sky-700/50">Level 1</span></td>
+                                <td class="px-4 py-4 text-emerald-400 font-medium">Active</td>
+                                <td class="px-4 py-4">Student</td>
+                                <td class="px-4 py-4 text-emerald-400 font-medium">On time</td>
+                            </tr>
+
+                            <!-- Row 2 -->
+                            <tr class="hover:bg-dark-border/20 group transition-colors">
+                                <td class="p-4"><input type="checkbox" class="row-checkbox w-4 h-4 text-primary bg-dark-bg border-dark-border rounded cursor-pointer accent-orange-500"></td>
+                                <td class="px-4 py-4 font-bold text-primary hover:underline cursor-pointer">STUF25574_CRS2C09AA</td>
+                                <td class="px-4 py-4">S.M.Jawwad</td>
+                                <td class="px-4 py-4">Backend Level 1 - Programming with Python</td>
+                                <td class="px-4 py-4 text-gray-400">Oct. 31, 2025</td>
+                                <td class="px-4 py-4 text-gray-400">Oct. 31, 2025</td>
+                                <td class="px-4 py-4 text-gray-400">Oct. 31, 2025</td>
+                                <td class="px-4 py-4"><span class="px-2 py-1 text-xs font-medium bg-sky-900/50 text-sky-300 rounded border border-sky-700/50">Level 1</span></td>
+                                <td class="px-4 py-4 text-emerald-400 font-medium">Active</td>
+                                <td class="px-4 py-4">Student</td>
+                                <td class="px-4 py-4 text-emerald-400 font-medium">On time</td>
+                            </tr>
+
+                            <!-- Row 3 -->
+                            <tr class="hover:bg-dark-border/20 group transition-colors">
+                                <td class="p-4"><input type="checkbox" class="row-checkbox w-4 h-4 text-primary bg-dark-bg border-dark-border rounded cursor-pointer accent-orange-500"></td>
+                                <td class="px-4 py-4 font-bold text-primary hover:underline cursor-pointer">STUF25574_CRS267895</td>
+                                <td class="px-4 py-4">S.M.Jawwad</td>
+                                <td class="px-4 py-4">Backend Level 2 - Object Oriented Programming</td>
+                                <td class="px-4 py-4 text-gray-400">Oct. 31, 2025</td>
+                                <td class="px-4 py-4 text-gray-400">Nov. 13, 2025</td>
+                                <td class="px-4 py-4 text-gray-400">Nov. 13, 2025</td>
+                                <td class="px-4 py-4"><span class="px-2 py-1 text-xs font-medium bg-purple-900/50 text-purple-300 rounded border border-purple-700/50">Level 2</span></td>
+                                <td class="px-4 py-4 text-emerald-400 font-medium">Active</td>
+                                <td class="px-4 py-4">Student</td>
+                                <td class="px-4 py-4 text-emerald-400 font-medium">On time</td>
+                            </tr>
+
+                            <!-- Row 4 -->
+                            <tr class="hover:bg-dark-border/20 group transition-colors">
+                                <td class="p-4"><input type="checkbox" class="row-checkbox w-4 h-4 text-primary bg-dark-bg border-dark-border rounded cursor-pointer accent-orange-500"></td>
+                                <td class="px-4 py-4 font-bold text-primary hover:underline cursor-pointer">STUC22E57_CRS9D7661</td>
+                                <td class="px-4 py-4">Hassan Raza Murtaza</td>
+                                <td class="px-4 py-4">Javascripts</td>
+                                <td class="px-4 py-4 text-gray-400">Aug. 14, 2025</td>
+                                <td class="px-4 py-4 text-gray-400">Aug. 30, 2025</td>
+                                <td class="px-4 py-4 text-gray-400">Nov. 8, 2025</td>
+                                <td class="px-4 py-4"><span class="px-2 py-1 text-xs font-medium bg-purple-900/50 text-purple-300 rounded border border-purple-700/50">Level 2</span></td>
+                                <td class="px-4 py-4 text-emerald-400 font-medium">Active</td>
+                                <td class="px-4 py-4">Student</td>
+                                <td class="px-4 py-4 text-red-400 font-semibold">70 days late</td>
+                            </tr>
+
+                            <!-- Row 5 -->
+                            <tr class="hover:bg-dark-border/20 group transition-colors">
+                                <td class="p-4"><input type="checkbox" class="row-checkbox w-4 h-4 text-primary bg-dark-bg border-dark-border rounded cursor-pointer accent-orange-500"></td>
+                                <td class="px-4 py-4 font-bold text-primary hover:underline cursor-pointer">STUA51D66_CRS2C09AA</td>
+                                <td class="px-4 py-4">Hassan Raza</td>
+                                <td class="px-4 py-4">Backend Level 1 - Programming with Python</td>
+                                <td class="px-4 py-4 text-gray-400">Oct. 31, 2025</td>
+                                <td class="px-4 py-4 text-gray-400">Nov. 4, 2025</td>
+                                <td class="px-4 py-4 text-gray-400">Nov. 4, 2025</td>
+                                <td class="px-4 py-4"><span class="px-2 py-1 text-xs font-medium bg-sky-900/50 text-sky-300 rounded border border-sky-700/50">Level 1</span></td>
+                                <td class="px-4 py-4 text-emerald-400 font-medium">Active</td>
+                                <td class="px-4 py-4">Student</td>
+                                <td class="px-4 py-4 text-emerald-400 font-medium">On time</td>
+                            </tr>
+
+                            <!-- Row 6 -->
+                            <tr class="hover:bg-dark-border/20 group transition-colors">
+                                <td class="p-4"><input type="checkbox" class="row-checkbox w-4 h-4 text-primary bg-dark-bg border-dark-border rounded cursor-pointer accent-orange-500"></td>
+                                <td class="px-4 py-4 font-bold text-primary hover:underline cursor-pointer">STUA41FFF_CRS9EF3EB</td>
+                                <td class="px-4 py-4">Asra Jawd</td>
+                                <td class="px-4 py-4">INSTAGRAM</td>
+                                <td class="px-4 py-4 text-gray-400">Oct. 30, 2025</td>
+                                <td class="px-4 py-4 text-gray-400">Nov. 1, 2025</td>
+                                <td class="px-4 py-4 text-gray-400">Nov. 4, 2025</td>
+                                <td class="px-4 py-4"><span class="px-2 py-1 text-xs font-medium bg-sky-900/50 text-sky-300 rounded border border-sky-700/50">Level 1</span></td>
+                                <td class="px-4 py-4 text-emerald-400 font-medium">Active</td>
+                                <td class="px-4 py-4">Student</td>
+                                <td class="px-4 py-4 text-red-400 font-semibold">3 days late</td>
+                            </tr>
+
+                            <!-- Row 7 -->
+                            <tr class="hover:bg-dark-border/20 group transition-colors">
+                                <td class="p-4"><input type="checkbox" class="row-checkbox w-4 h-4 text-primary bg-dark-bg border-dark-border rounded cursor-pointer accent-orange-500"></td>
+                                <td class="px-4 py-4 font-bold text-primary hover:underline cursor-pointer">STU7E3EED_CRS7DBD3F</td>
+                                <td class="px-4 py-4">S.M.Hadi Raza</td>
+                                <td class="px-4 py-4">AI for Graphic Design</td>
+                                <td class="px-4 py-4 text-gray-400">Nov. 18, 2025</td>
+                                <td class="px-4 py-4 text-gray-400">Nov. 22, 2025</td>
+                                <td class="px-4 py-4 text-gray-400">Nov. 21, 2025</td>
+                                <td class="px-4 py-4"><span class="px-2 py-1 text-xs font-medium bg-purple-900/50 text-purple-300 rounded border border-purple-700/50">Level 2</span></td>
+                                <td class="px-4 py-4 text-emerald-400 font-medium">Active</td>
+                                <td class="px-4 py-4">Student</td>
+                                <td class="px-4 py-4 text-blue-300 font-semibold">1 days early</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <!-- End Scrollable Table -->
+            </div>
+        </main>
+    </div>
+    
+    <!-- =========== DYNAMIC FILTER SIDEBAR =========== -->
+    <div id="filter-backdrop" class="fixed inset-0 bg-black/50 z-40 hidden backdrop-blur-sm transition-opacity"></div>
+    
+    <div id="filter-sidebar" class="fixed inset-y-0 right-0 w-80 bg-dark-card border-l border-dark-border shadow-2xl z-50 transform translate-x-full overflow-y-auto flex flex-col">
+        <div class="p-5 border-b border-dark-border flex items-center justify-between sticky top-0 bg-dark-card z-10">
+            <h2 class="text-lg font-bold text-white flex items-center gap-2"><i data-lucide="filter" class="w-5 h-5 text-primary"></i> Filters</h2>
+            <button id="close-filter-btn" class="text-gray-400 hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
+        </div>
+        <div class="p-5 space-y-6 flex-1">
+            <div class="space-y-2"><label class="text-xs font-semibold text-gray-500 uppercase">By Status</label><select class="w-full px-3 py-2 text-sm rounded-lg border filter-select"><option>All</option><option>Level 1</option><option>Level 2</option></select></div>
+            <div class="space-y-2"><label class="text-xs font-semibold text-gray-500 uppercase">By Student</label><select class="w-full px-3 py-2 text-sm rounded-lg border filter-select"><option>All</option><option>S.M.Moosa</option></select></div>
+        </div>
+        <div class="p-5 border-t border-dark-border sticky bottom-0 bg-dark-card z-10 space-y-3">
+            <button class="w-full py-2.5 bg-primary text-white font-semibold rounded-lg">Apply</button>
+            <button class="w-full py-2.5 bg-dark-border text-gray-300 font-semibold rounded-lg">Reset</button>
+        </div>
+    </div>
+</div>
+
+<script>
+        lucide.createIcons();
+
+        // --- FULLY FUNCTIONAL SCRIPT BLOCK ---
+        function toggleDropdown(panelId, iconId) {
+            const panel = document.getElementById(panelId);
+            const icon = document.getElementById(iconId);
+            panel.classList.toggle('hidden');
+            if (panel.classList.contains('hidden')) {
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebar = document.getElementById('sidebar');
+            const openSidebarBtn = document.getElementById('open-sidebar-btn');
+            const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+            
+            const activeClass = "bg-gradient-to-r from-primary to-orange-500 text-white font-semibold rounded-lg shadow-lg";
+            const inactiveClass = "text-gray-400 hover:text-white rounded-lg transition-colors";
+            const activeSubClass = "text-primary font-semibold";
+            const inactiveSubClass = "text-gray-400 hover:text-white";
+            let currentPage = window.location.pathname.split('/').pop() || 'admindashboard.html';
+
+            if (openSidebarBtn) {
+                const openSidebar = () => { sidebar.classList.remove('-translate-x-full'); sidebarOverlay.classList.remove('hidden'); };
+                const closeSidebar = () => { sidebar.classList.add('-translate-x-full'); sidebarOverlay.classList.add('hidden'); };
+                openSidebarBtn.addEventListener('click', openSidebar);
+                closeSidebarBtn.addEventListener('click', closeSidebar);
+                sidebarOverlay.addEventListener('click', closeSidebar);
+            }
+
+            // Set Active Menu Items Dynamically
+            const sidebarLinks = sidebar.querySelectorAll('a');
+            sidebarLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                if (href && href.includes(currentPage) && currentPage !== '') {
+                    const panel = link.closest('div[id$="-panel"]');
+                    if (panel) {
+                        link.className = link.className.replace(inactiveSubClass, activeSubClass);
+                        panel.classList.remove('hidden');
+                        const btn = panel.previousElementSibling;
+                        if (btn) {
+                            btn.className = btn.className.replace(inactiveClass, activeClass);
+                            const icon = btn.querySelector('i[id$="-icon"]');
+                            if (icon) icon.style.transform = 'rotate(180deg)';
+                        }
+                    } else {
+                        link.className = link.className.replace(inactiveClass, activeClass);
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

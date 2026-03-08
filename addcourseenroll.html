@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TMS Portal - Add Course Enrolment</title>
+  <link rel="icon" href="f.icon.webp.webp" type="image/x-icon">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'], },
+          colors: {
+            primary: '#F16611', 'primary-dark': '#D95A0E', 'dark-bg': '#0D1117',
+            'dark-card': '#161B22', 'dark-border': '#30363D',
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* Custom Styles */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #30363D; border-radius: 3px; }
+    body::before { /* Aurora Background */
+        content: ''; position: absolute; inset: 0;
+        background-image: radial-gradient(circle at 15% 15%, #F1661120 0%, transparent 25%),
+                          radial-gradient(circle at 85% 75%, #4f46e520 0%, transparent 25%);
+        filter: blur(60px); z-index: -1; animation: subtle-move 20s infinite alternate;
+    }
+    @keyframes subtle-move { from { transform: translate(0, 0); } to { transform: translate(20px, -30px); } }
+    #manage-users-btn[aria-expanded="true"] #arrow-icon { transform: rotate(180deg); }
+    #arrow-icon { transition: transform 0.2s ease-in-out; }
+  </style>
+</head>
+
+<body class="font-sans bg-dark-bg text-gray-300 overflow-x-hidden">
+  <div class="relative min-h-screen md:flex">
+    
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 z-30 md:hidden hidden"></div>
+    
+    <!-- =========== ADMIN SIDEBAR START =========== -->
+    <aside id="sidebar" class="w-64 flex-shrink-0 bg-dark-card/80 backdrop-blur-xl border-r border-dark-border flex-col
+                             fixed inset-y-0 left-0 z-40 md:relative md:translate-x-0
+                             transform -translate-x-full transition-transform duration-300 ease-in-out">
+            <div class="h-20 flex items-center justify-between px-6 flex-shrink-0">
+                <a href="#" class="flex items-center gap-3"><img src="logo.webp" alt="Logo"
+                        class="w-10 rounded-full"><span class="text-xl text-white font-bold">TMS Admin</span></a>
+                <button id="close-sidebar-btn" class="md:hidden text-gray-400 hover:text-white"><i data-lucide="x"
+                        class="w-6 h-6"></i></button>
+            </div>
+
+            <nav class="flex-1 px-4 py-6 space-y-2">
+                <a id="dashboard-link" href="admindashboard.html"
+                    class="flex items-center gap-3 px-4 py-2.5 text-gray-400 hover:text-white rounded-lg transition-colors">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+                </a>
+                <!-- Manage Users -->
+                <div>
+                    <button onclick="toggleDropdown('manage-users-panel', 'manage-users-icon')"
+                        class="w-full flex justify-between items-center gap-3 px-4 py-2.5 text-gray-400 hover:text-white rounded-lg transition-colors">
+                        <span class="flex items-center gap-3">
+                            <i data-lucide="users" class="w-5 h-5"></i> Manage Users
+                        </span>
+                        <i id="manage-users-icon" data-lucide="chevron-down" class="w-5 h-5 transition-transform duration-200"></i>
+                    </button>
+                    <div id="manage-users-panel" class="pl-6 pt-2 space-y-1 hidden">
+                        <a id="changeuser-link" href="changeuser.html"
+                            class="flex items-center gap-3 px-4 py-2 text-sm text-gray-400 hover:text-white rounded-lg transition-colors">Change
+                            user</a>
+                        <a id="adduser-link" href="manageusers.html"
+                            class="flex items-center gap-3 px-4 py-2 text-sm text-gray-400 hover:text-white rounded-lg transition-colors">Add
+                            user</a>
+                    </div>
+                </div>
+
+                <!-- Course Enrolments -->
+                <div>
+                    <button onclick="toggleDropdown('enrollment-panel', 'enrollment-icon')"
+                        class="w-full flex justify-between items-center gap-3 px-4 py-2.5 text-gray-400 hover:text-white rounded-lg transition-colors">
+                        <span class="flex items-center gap-3"><i data-lucide="bookmark" class="w-5 h-5"></i> Course
+                            Enrolments</span>
+                        <i id="enrollment-icon" data-lucide="chevron-down"
+                            class="w-5 h-5 transition-transform duration-200"></i>
+                    </button>
+                    <div id="enrollment-panel" class="pl-6 pt-2 space-y-1 hidden">
+                        <a href="changecourseenroll.html"
+                            class="flex items-center gap-3 px-4 py-2 text-sm text-gray-400 hover:text-white rounded-lg transition-colors">Change
+                            enrolment</a>
+                        <a href="addcourseenroll.html"
+                            class="flex items-center gap-3 px-4 py-2 text-sm text-gray-400 hover:text-white rounded-lg transition-colors">Add
+                            enrolment</a>
+                    </div>
+                </div>
+
+                <!-- Courses -->
+                <div>
+                    <button onclick="toggleDropdown('course-panel', 'course-icon')"
+                        class="w-full flex justify-between items-center gap-3 px-4 py-2.5 text-gray-400 hover:text-white rounded-lg transition-colors">
+                        <span class="flex items-center gap-3"><i data-lucide="book" class="w-5 h-5"></i> Courses</span>
+                        <i id="course-icon" data-lucide="chevron-down"
+                            class="w-5 h-5 transition-transform duration-200"></i>
+                    </button>
+                    <div id="course-panel" class="pl-6 pt-2 space-y-1 hidden">
+                        <a href="changecourse.html"
+                            class="flex items-center gap-3 px-4 py-2 text-sm text-gray-400 hover:text-white rounded-lg transition-colors">Change
+                            course</a>
+                        <a href="addcourse.html"
+                            class="flex items-center gap-3 px-4 py-2 text-sm text-gray-400 hover:text-white rounded-lg transition-colors">Add
+                            course</a>
+                    </div>
+                </div>
+
+                <!-- Exams -->
+                <div>
+                    <button onclick="toggleDropdown('exam-panel', 'exam-icon')"
+                        class="w-full flex justify-between items-center gap-3 px-4 py-2.5 text-gray-400 hover:text-white rounded-lg transition-colors">
+                        <span class="flex items-center gap-3"><i data-lucide="file-text" class="w-5 h-5"></i>
+                            Exams</span>
+                        <i id="exam-icon" data-lucide="chevron-down"
+                            class="w-5 h-5 transition-transform duration-200"></i>
+                    </button>
+                    <div id="exam-panel" class="pl-6 pt-2 space-y-1 hidden">
+                        <a href="changexam.html"
+                            class="flex items-center gap-3 px-4 py-2 text-sm text-gray-400 hover:text-white rounded-lg transition-colors">Change
+                            exam</a>
+                        <a href="addexam.html"
+                            class="flex items-center gap-3 px-4 py-2 text-sm text-gray-400 hover:text-white rounded-lg transition-colors">Add
+                            exam</a>
+                    </div>
+                </div>
+
+                <!-- Students -->
+                <div>
+                    <button onclick="toggleDropdown('student-panel', 'student-icon')"
+                        class="w-full flex justify-between items-center gap-3 px-4 py-2.5 text-gray-400 hover:text-white rounded-lg transition-colors">
+                        <span class="flex items-center gap-3"><i data-lucide="graduation-cap" class="w-5 h-5"></i>
+                            Students</span>
+                        <i id="student-icon" data-lucide="chevron-down"
+                            class="w-5 h-5 transition-transform duration-200"></i>
+                    </button>
+                    <div id="student-panel" class="pl-6 pt-2 space-y-1 hidden">
+                        <a href="changestudent.html"
+                            class="flex items-center gap-3 px-4 py-2 text-sm text-gray-400 hover:text-white rounded-lg transition-colors">Change
+                            student</a>
+                        <a href="addstudent.html"
+                            class="flex items-center gap-3 px-4 py-2 text-sm text-gray-400 hover:text-white rounded-lg transition-colors">Add
+                            student</a>
+                    </div>
+                </div>
+            </nav>
+            <div class="px-4 py-6"><a href="index.html"
+                    class="flex items-center gap-3 px-4 py-2.5 text-gray-400 hover:text-red-400 rounded-lg transition-colors"><i
+                        data-lucide="log-out" class="w-5 h-5"></i> Log Out</a></div>
+        </aside>
+    <!-- =========== ADMIN SIDEBAR END =========== -->
+
+    <!-- =========== MAIN CONTENT START =========== -->
+    <div class="flex-1 flex flex-col max-h-screen">
+        <header class="h-20 flex-shrink-0 flex items-center justify-between px-4 sm:px-8 bg-dark-bg/60 backdrop-blur-xl border-b border-dark-border z-10">
+            <div class="flex items-center gap-4">
+                <button id="open-sidebar-btn" class="md:hidden text-gray-300 hover:text-white"><i data-lucide="menu" class="w-6 h-6"></i></button>
+                <h1 class="text-xl sm:text-2xl font-bold text-white">Add Course Enrolment</h1>
+            </div>
+            <button class="flex items-center gap-3"><span class="hidden sm:inline text-sm font-semibold">Welcome, Admin</span><img src="https://i.postimg.cc/XJ8K3vZ7/user.png" class="w-10 h-10 rounded-full border-2 border-primary" alt="Admin Avatar"></button>
+        </header>
+        
+        <main class="flex-1 overflow-y-auto p-4 sm:p-8">
+             <div class="bg-dark-card/80 backdrop-blur-lg border border-dark-border rounded-2xl shadow-lg">
+                
+                <!-- Enrolment Information -->
+                <fieldset class="p-6">
+                    <div class="border-b border-dark-border pb-4 mb-6"><legend class="text-lg font-semibold text-white">Enrolment Information</legend></div>
+                    <div class="space-y-6">
+                        
+                        <!-- Serial Number -->
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+                            <label class="font-semibold text-gray-400 md:text-right">Serial number:</label>
+                            <div class="md:col-span-3 text-gray-500">-</div>
+                        </div>
+
+                        <!-- Student Dropdown -->
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+                            <label class="font-semibold text-gray-400 md:text-right">Student:</label>
+                            <div class="md:col-span-3">
+                                <div class="flex items-center gap-2 max-w-sm w-full">
+                                    <select class="flex-grow px-3 py-2 border border-dark-border bg-dark-bg rounded-lg outline-none focus:ring-2 focus:ring-primary">
+                                        <option value="" selected>---------</option>
+                                    </select>
+                                    <a href="#" title="Edit" class="text-gray-400 hover:text-white"><i data-lucide="pencil" class="w-4 h-4"></i></a>
+                                    <a href="#" title="Add" class="text-primary hover:text-primary-dark"><i data-lucide="plus-circle" class="w-4 h-4"></i></a>
+                                    <a href="#" title="View" class="text-gray-400 hover:text-white"><i data-lucide="eye" class="w-4 h-4"></i></a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Course Dropdown -->
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+                            <label class="font-semibold text-gray-400 md:text-right">Course:</label>
+                            <div class="md:col-span-3">
+                                <div class="flex items-center gap-2 max-w-sm w-full">
+                                    <select class="flex-grow px-3 py-2 border border-dark-border bg-dark-bg rounded-lg outline-none focus:ring-2 focus:ring-primary">
+                                        <option value="" selected>---------</option>
+                                    </select>
+                                    <a href="#" title="Edit" class="text-gray-400 hover:text-white"><i data-lucide="pencil" class="w-4 h-4"></i></a>
+                                    <a href="#" title="Add" class="text-primary hover:text-primary-dark"><i data-lucide="plus-circle" class="w-4 h-4"></i></a>
+                                    <a href="#" title="View" class="text-gray-400 hover:text-white"><i data-lucide="eye" class="w-4 h-4"></i></a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Status Dropdown -->
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+                            <label class="font-semibold text-gray-400 md:text-right">Status:</label>
+                            <div class="md:col-span-3">
+                                <select class="w-full max-w-xs px-3 py-2 border border-dark-border bg-dark-bg rounded-lg outline-none focus:ring-2 focus:ring-primary">
+                                    <option value="" selected>---------</option>
+                                    <option>Enrolled</option>
+                                    <option>Completed</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Active Status -->
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+                            <label class="font-semibold text-gray-400 md:text-right">Active status:</label>
+                            <div class="md:col-span-3">
+                                <select class="w-full max-w-[150px] px-3 py-2 border border-dark-border bg-dark-bg rounded-lg outline-none focus:ring-2 focus:ring-primary">
+                                    <option>Active</option>
+                                    <option>Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Designation -->
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+                            <label class="font-semibold text-gray-400 md:text-right">Designation:</label>
+                            <div class="md:col-span-3">
+                                <select class="w-full max-w-[150px] px-3 py-2 border border-dark-border bg-dark-bg rounded-lg outline-none focus:ring-2 focus:ring-primary">
+                                    <option>Student</option>
+                                    <option>OJT</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                </fieldset>
+
+                 <!-- Dates Information -->
+                 <fieldset class="p-6 border-t border-dark-border">
+                    <div class="border-b border-dark-border pb-4 mb-6"><legend class="text-lg font-semibold text-white">Dates</legend></div>
+                    <div class="space-y-6">
+                        
+                        <!-- Enrolment Date -->
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+                            <label class="font-semibold text-gray-400 md:text-right">Enrolment date:</label>
+                            <div class="md:col-span-3 flex items-center gap-3">
+                                <input type="date" id="enrolment-date" class="w-full max-w-xs py-2 px-3 border border-dark-border bg-dark-bg rounded-lg outline-none focus:ring-2 focus:ring-primary">
+                                <button type="button" onclick="document.getElementById('enrolment-date').valueAsDate = new Date()" class="text-primary hover:underline text-sm font-semibold">Today</button>
+                            </div>
+                        </div>
+
+                        <!-- Deadline -->
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+                            <label class="font-semibold text-gray-400 md:text-right">Deadline:</label>
+                            <div class="md:col-span-3 flex items-center gap-3">
+                                <input type="date" id="deadline-date" class="w-full max-w-xs py-2 px-3 border border-dark-border bg-dark-bg rounded-lg outline-none focus:ring-2 focus:ring-primary">
+                                <button type="button" onclick="document.getElementById('deadline-date').valueAsDate = new Date()" class="text-primary hover:underline text-sm font-semibold">Today</button>
+                            </div>
+                        </div>
+
+                        <!-- Completion Date -->
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+                            <label class="font-semibold text-gray-400 md:text-right">Completion date:</label>
+                            <div class="md:col-span-3 flex items-center gap-3">
+                                <input type="date" id="completion-date" class="w-full max-w-xs py-2 px-3 border border-dark-border bg-dark-bg rounded-lg outline-none focus:ring-2 focus:ring-primary">
+                                <button type="button" onclick="document.getElementById('completion-date').valueAsDate = new Date()" class="text-primary hover:underline text-sm font-semibold">Today</button>
+                            </div>
+                        </div>
+
+                    </div>
+                 </fieldset>
+
+                 <!-- Calculated Fields -->
+                 <fieldset class="p-6 border-t border-dark-border">
+                    <div class="border-b border-dark-border pb-4 mb-6"><legend class="text-lg font-semibold text-white">Calculated Fields</legend></div>
+                    <div class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+                            <label class="font-semibold text-gray-400 md:text-right">Extra Time:</label>
+                            <div class="md:col-span-3 text-gray-300 font-medium">Not completed yet</div>
+                        </div>
+                    </div>
+                 </fieldset>
+                
+                <!-- Action Buttons -->
+                 <div class="p-4 bg-dark-card/50 rounded-b-2xl flex flex-wrap gap-4 items-center border-t border-dark-border">
+                    <button class="px-5 py-2 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-primary-dark transition-colors uppercase">Save</button>
+                    <button class="px-5 py-2 bg-dark-border text-white text-sm font-semibold rounded-lg hover:bg-dark-border/70 transition-colors">Save and add another</button>
+                    <button class="px-5 py-2 bg-dark-border text-white text-sm font-semibold rounded-lg hover:bg-dark-border/70 transition-colors">Save and continue editing</button>
+                </div>
+             </div>
+        </main>
+    </div>
+</div>
+
+  <script>
+        lucide.createIcons();
+
+        // --- FULLY FUNCTIONAL SCRIPT BLOCK ---
+        function toggleDropdown(panelId, iconId) {
+            const panel = document.getElementById(panelId);
+            const icon = document.getElementById(iconId);
+            panel.classList.toggle('hidden');
+            if (panel.classList.contains('hidden')) {
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebar = document.getElementById('sidebar');
+            const openSidebarBtn = document.getElementById('open-sidebar-btn');
+            const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+            
+            const activeClass = "bg-gradient-to-r from-primary to-orange-500 text-white font-semibold rounded-lg shadow-lg";
+            const inactiveClass = "text-gray-400 hover:text-white rounded-lg transition-colors";
+            const activeSubClass = "text-primary font-semibold";
+            const inactiveSubClass = "text-gray-400 hover:text-white";
+            let currentPage = window.location.pathname.split('/').pop() || 'admindashboard.html';
+
+            if (openSidebarBtn) {
+                const openSidebar = () => { sidebar.classList.remove('-translate-x-full'); sidebarOverlay.classList.remove('hidden'); };
+                const closeSidebar = () => { sidebar.classList.add('-translate-x-full'); sidebarOverlay.classList.add('hidden'); };
+                openSidebarBtn.addEventListener('click', openSidebar);
+                closeSidebarBtn.addEventListener('click', closeSidebar);
+                sidebarOverlay.addEventListener('click', closeSidebar);
+            }
+
+            // Set Active Menu Items Dynamically
+            const sidebarLinks = sidebar.querySelectorAll('a');
+            sidebarLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                if (href && href.includes(currentPage) && currentPage !== '') {
+                    const panel = link.closest('div[id$="-panel"]');
+                    if (panel) {
+                        link.className = link.className.replace(inactiveSubClass, activeSubClass);
+                        panel.classList.remove('hidden');
+                        const btn = panel.previousElementSibling;
+                        if (btn) {
+                            btn.className = btn.className.replace(inactiveClass, activeClass);
+                            const icon = btn.querySelector('i[id$="-icon"]');
+                            if (icon) icon.style.transform = 'rotate(180deg)';
+                        }
+                    } else {
+                        link.className = link.className.replace(inactiveClass, activeClass);
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

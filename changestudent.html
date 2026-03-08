@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TMS Portal - Change Student</title>
+  <link rel="icon" href="f.icon.webp.webp" type="image/x-icon">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'], },
+          colors: {
+            primary: '#F16611', 'primary-dark': '#D95A0E', 'dark-bg': '#0D1117',
+            'dark-card': '#161B22', 'dark-border': '#30363D',
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* Custom Styles */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #30363D; border-radius: 3px; }
+    body::before { /* Aurora Background */
+        content: ''; position: absolute; inset: 0;
+        background-image: radial-gradient(circle at 15% 15%, #F1661120 0%, transparent 25%),
+                          radial-gradient(circle at 85% 75%, #4f46e520 0%, transparent 25%);
+        filter: blur(60px); z-index: -1; animation: subtle-move 20s infinite alternate;
+    }
+    @keyframes subtle-move { from { transform: translate(0, 0); } to { transform: translate(20px, -30px); } }
+    
+    #manage-users-btn[aria-expanded="true"] #arrow-icon { transform: rotate(180deg); }
+    #arrow-icon { transition: transform 0.2s ease-in-out; }
+
+    /* Filter Sidebar Transition */
+    #filter-sidebar { transition: transform 0.3s ease-in-out; }
+    
+    /* Custom Select for Filters */
+    .filter-select {
+        background-color: #0D1117;
+        border-color: #30363D;
+        color: #d1d5db;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+        background-position: right 0.5rem center;
+        background-repeat: no-repeat;
+        background-size: 1.5em 1.5em;
+    }
+  </style>
+</head>
+
+<body class="font-sans bg-dark-bg text-gray-300 overflow-x-hidden">
+  <div class="relative min-h-screen md:flex">
+    
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 z-30 md:hidden hidden"></div>
+    
+    <!-- =========== ADMIN SIDEBAR START =========== -->
+    <aside id="sidebar" class="w-64 flex-shrink-0 bg-dark-card/80 backdrop-blur-xl border-r border-dark-border flex-col
+                             fixed inset-y-0 left-0 z-40 md:relative md:translate-x-0
+                             transform -translate-x-full transition-transform duration-300 ease-in-out">
+            <div class="h-20 flex items-center justify-between px-6 flex-shrink-0">
+                <a href="#" class="flex items-center gap-3"><img src="logo.webp" alt="Logo"
+                        class="w-10 rounded-full"><span class="text-xl text-white font-bold">TMS Admin</span></a>
+                <button id="close-sidebar-btn" class="md:hidden text-gray-400 hover:text-white"><i data-lucide="x"
+                        class="w-6 h-6"></i></button>
+            </div>
+
+            <nav class="flex-1 px-4 py-6 space-y-2">
+                <a id="dashboard-link" href="admindashboard.html"
+                    class="flex items-center gap-3 px-4 py-2.5 text-gray-400 hover:text-white rounded-lg transition-colors">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+                </a>
+                <!-- Manage Users -->
+                <div>
+                    <button onclick="toggleDropdown('manage-users-panel', 'manage-users-icon')"
+                        class="w-full flex justify-between items-center gap-3 px-4 py-2.5 text-gray-400 hover:text-white rounded-lg transition-colors">
+                        <span class="flex items-center gap-3">
+                            <i data-lucide="users" class="w-5 h-5"></i> Manage Users
+                        </span>
+                        <i id="manage-users-icon" data-lucide="chevron-down" class="w-5 h-5 transition-transform duration-200"></i>
+                    </button>
+                    <div id="manage-users-panel" class="pl-6 pt-2 space-y-1 hidden">
+                        <a id="changeuser-link" href="changeuser.html"
+                            class="flex items-center gap-3 px-4 py-2 text-sm text-gray-400 hover:text-white rounded-lg transition-colors">Change
+                            user</a>
+                        <a id="adduser-link" href="manageusers.html"
+                            class="flex items-center gap-3 px-4 py-2 text-sm text-gray-400 hover:text-white rounded-lg transition-colors">Add
+                            user</a>
+                    </div>
+                </div>
+
+                <!-- Course Enrolments -->
+                <div>
+                    <button onclick="toggleDropdown('enrollment-panel', 'enrollment-icon')"
+                        class="w-full flex justify-between items-center gap-3 px-4 py-2.5 text-gray-400 hover:text-white rounded-lg transition-colors">
+                        <span class="flex items-center gap-3"><i data-lucide="bookmark" class="w-5 h-5"></i> Course
+                            Enrolments</span>
+                        <i id="enrollment-icon" data-lucide="chevron-down"
+                            class="w-5 h-5 transition-transform duration-200"></i>
+                    </button>
+                    <div id="enrollment-panel" class="pl-6 pt-2 space-y-1 hidden">
+                        <a href="changecourseenroll.html"
+                            class="flex items-center gap-3 px-4 py-2 text-sm text-gray-400 hover:text-white rounded-lg transition-colors">Change
+                            enrolment</a>
+                        <a href="addcourseenroll.html"
+                            class="flex items-center gap-3 px-4 py-2 text-sm text-gray-400 hover:text-white rounded-lg transition-colors">Add
+                            enrolment</a>
+                    </div>
+                </div>
+
+                <!-- Courses -->
+                <div>
+                    <button onclick="toggleDropdown('course-panel', 'course-icon')"
+                        class="w-full flex justify-between items-center gap-3 px-4 py-2.5 text-gray-400 hover:text-white rounded-lg transition-colors">
+                        <span class="flex items-center gap-3"><i data-lucide="book" class="w-5 h-5"></i> Courses</span>
+                        <i id="course-icon" data-lucide="chevron-down"
+                            class="w-5 h-5 transition-transform duration-200"></i>
+                    </button>
+                    <div id="course-panel" class="pl-6 pt-2 space-y-1 hidden">
+                        <a href="changecourse.html"
+                            class="flex items-center gap-3 px-4 py-2 text-sm text-gray-400 hover:text-white rounded-lg transition-colors">Change
+                            course</a>
+                        <a href="addcourse.html"
+                            class="flex items-center gap-3 px-4 py-2 text-sm text-gray-400 hover:text-white rounded-lg transition-colors">Add
+                            course</a>
+                    </div>
+                </div>
+
+                <!-- Exams -->
+                <div>
+                    <button onclick="toggleDropdown('exam-panel', 'exam-icon')"
+                        class="w-full flex justify-between items-center gap-3 px-4 py-2.5 text-gray-400 hover:text-white rounded-lg transition-colors">
+                        <span class="flex items-center gap-3"><i data-lucide="file-text" class="w-5 h-5"></i>
+                            Exams</span>
+                        <i id="exam-icon" data-lucide="chevron-down"
+                            class="w-5 h-5 transition-transform duration-200"></i>
+                    </button>
+                    <div id="exam-panel" class="pl-6 pt-2 space-y-1 hidden">
+                        <a href="changexam.html"
+                            class="flex items-center gap-3 px-4 py-2 text-sm text-gray-400 hover:text-white rounded-lg transition-colors">Change
+                            exam</a>
+                        <a href="addexam.html"
+                            class="flex items-center gap-3 px-4 py-2 text-sm text-gray-400 hover:text-white rounded-lg transition-colors">Add
+                            exam</a>
+                    </div>
+                </div>
+
+                <!-- Students -->
+                <div>
+                    <button onclick="toggleDropdown('student-panel', 'student-icon')"
+                        class="w-full flex justify-between items-center gap-3 px-4 py-2.5 text-gray-400 hover:text-white rounded-lg transition-colors">
+                        <span class="flex items-center gap-3"><i data-lucide="graduation-cap" class="w-5 h-5"></i>
+                            Students</span>
+                        <i id="student-icon" data-lucide="chevron-down"
+                            class="w-5 h-5 transition-transform duration-200"></i>
+                    </button>
+                    <div id="student-panel" class="pl-6 pt-2 space-y-1 hidden">
+                        <a href="changestudent.html"
+                            class="flex items-center gap-3 px-4 py-2 text-sm text-gray-400 hover:text-white rounded-lg transition-colors">Change
+                            student</a>
+                        <a href="addstudent.html"
+                            class="flex items-center gap-3 px-4 py-2 text-sm text-gray-400 hover:text-white rounded-lg transition-colors">Add
+                            student</a>
+                    </div>
+                </div>
+            </nav>
+            <div class="px-4 py-6"><a href="index.html"
+                    class="flex items-center gap-3 px-4 py-2.5 text-gray-400 hover:text-red-400 rounded-lg transition-colors"><i
+                        data-lucide="log-out" class="w-5 h-5"></i> Log Out</a></div>
+        </aside>
+    <!-- =========== ADMIN SIDEBAR END =========== -->
+    
+    <!-- =========== MAIN CONTENT START =========== -->
+    <div class="flex-1 flex flex-col max-h-screen">
+        <header class="h-20 flex-shrink-0 flex items-center justify-between px-4 sm:px-8 bg-dark-bg/60 backdrop-blur-xl border-b border-dark-border z-10">
+            <div class="flex items-center gap-4">
+                <button id="open-sidebar-btn" class="md:hidden text-gray-300 hover:text-white"><i data-lucide="menu" class="w-6 h-6"></i></button>
+                <h1 class="text-xl sm:text-2xl font-bold text-white">Select Student to Change</h1>
+            </div>
+             
+             <!-- Desktop Only Buttons -->
+             <div class="hidden md:flex items-center gap-3">
+                <button onclick="exportTableToCSV('student_list.csv')" class="flex items-center gap-2 px-3 py-2 bg-dark-border text-white text-xs font-semibold rounded-lg hover:bg-dark-border/70 transition-colors border border-dark-border">
+                    <i data-lucide="download" class="w-4 h-4"></i> Export CSV
+                </button>
+                <a href="addstudent.html" class="flex items-center gap-2 px-3 py-2 bg-primary text-white text-xs font-semibold rounded-lg hover:bg-primary-dark transition-colors shadow-lg shadow-primary/20">
+                    <i data-lucide="plus" class="w-4 h-4"></i> Add Student
+                </a>
+            </div>
+        </header>
+        
+        <main class="flex-1 overflow-y-auto p-4 sm:p-8">
+            
+            <!-- Mobile Only Buttons (Grid Layout: Middle of Header Title and Search Bar) -->
+            <div class="md:hidden mb-4 grid grid-cols-2 gap-3">
+                <!-- Export CSV -->
+                 <button onclick="exportTableToCSV('student_list.csv')" class="flex justify-center items-center gap-2 px-4 py-2.5 bg-dark-card border border-dark-border text-gray-300 text-sm font-semibold rounded-lg hover:bg-dark-border hover:text-white transition-colors">
+                    <i data-lucide="download" class="w-4 h-4"></i> Export CSV
+                </button>
+                <!-- Add Student -->
+                <a href="addstudent.html" class="flex justify-center items-center gap-2 px-4 py-2.5 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-primary-dark transition-colors shadow-lg shadow-primary/20">
+                    <i data-lucide="plus" class="w-4 h-4"></i> Add Student
+                </a>
+            </div>
+
+            <div class="bg-dark-card/80 backdrop-blur-lg border border-dark-border rounded-2xl">
+                <!-- Search and Actions Bar -->
+                <div class="p-4 border-b border-dark-border space-y-4">
+                     <div class="flex flex-wrap items-center gap-4">
+                        <div class="relative flex-grow max-w-sm">
+                             <i data-lucide="search" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500"></i>
+                             <input type="text" id="search-input" placeholder="Search students..." class="w-full pl-12 pr-4 py-2.5 border border-dark-border bg-dark-bg rounded-lg outline-none focus:ring-2 focus:ring-primary">
+                        </div>
+
+                        <!-- FILTER TOGGLE BUTTON -->
+                        <button id="filter-toggle-btn" class="flex items-center gap-2 px-5 py-2.5 bg-dark-border text-white text-sm font-semibold rounded-lg hover:bg-dark-border/70 transition-colors">
+                            <i data-lucide="filter" class="w-4 h-4"></i> Filters
+                        </button>
+
+                        <button id="search-btn" class="px-5 py-2.5 bg-dark-border text-white text-sm font-semibold rounded-lg hover:bg-dark-border/70">Search</button>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-4">
+                        <label for="action-select" class="text-sm">Action:</label>
+                        <select id="action-select" class="flex-grow max-w-xs px-4 py-2 border border-dark-border bg-dark-bg rounded-lg outline-none focus:ring-2 focus:ring-primary">
+                            <option>---------</option>
+                            <option>Delete selected students</option>
+                        </select>
+                        <button class="px-4 py-2 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-primary-dark">Go</button>
+                        <span id="selection-count" class="text-sm text-gray-400">0 of 4 selected</span>
+                    </div>
+                </div>
+
+                <!-- Students Table -->
+                <div class="overflow-x-auto">
+                     <table class="min-w-full text-sm">
+                        <thead class="bg-dark-card/50">
+                            <tr>
+                                <th class="p-3 w-4"><input type="checkbox" id="select-all-checkbox" class="w-4 h-4 text-primary bg-dark-bg border-dark-border rounded focus:ring-primary"></th>
+                                <th class="px-3 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Serial Number</th>
+                                <th class="px-3 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Name</th>
+                                <th class="px-3 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Profile Picture</th>
+                                <th class="px-3 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Email</th>
+                                <th class="px-3 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body" class="divide-y divide-dark-border/50">
+                            <!-- Sample Rows -->
+                            <tr class="hover:bg-dark-border/20" 
+                                data-status="active" 
+                                data-course="programming with python" 
+                                data-joining="2023-11-20" 
+                                data-resignation="">
+                                <td class="p-3"><input type="checkbox" class="row-checkbox w-4 h-4 text-primary bg-dark-bg rounded"></td>
+                                <td class="px-3 py-4"><a href="#" class="font-medium text-primary hover:underline">STUF3474D</a></td>
+                                <td class="px-3 py-4">S.M.Moosa</td>
+                                <td class="px-3 py-4"><img src="https://i.postimg.cc/XJ8K3vZ7/user.png" class="w-8 h-8 rounded-full"></td>
+                                <td class="px-3 py-4">syedmoosa.tms@gmail.com</td>
+                                <td class="px-3 py-4"><span class="px-2 py-1 text-xs font-semibold rounded-md bg-emerald-900 text-emerald-300">Active</span></td>
+                            </tr>
+                            <tr class="hover:bg-dark-border/20" 
+                                data-status="active" 
+                                data-course="object oriented programming" 
+                                data-joining="2023-11-25" 
+                                data-resignation="">
+                                <td class="p-3"><input type="checkbox" class="row-checkbox w-4 h-4 text-primary bg-dark-bg rounded"></td>
+                                <td class="px-3 py-4"><a href="#" class="font-medium text-primary hover:underline">STUF25574</a></td>
+                                <td class="px-3 py-4">S.M.Jawwad</td>
+                                <td class="px-3 py-4"><img src="https://i.postimg.cc/XJ8K3vZ7/user.png" class="w-8 h-8 rounded-full"></td>
+                                <td class="px-3 py-4">syedjawwad.tms@gmail.com</td>
+                                <td class="px-3 py-4"><span class="px-2 py-1 text-xs font-semibold rounded-md bg-emerald-900 text-emerald-300">Active</span></td>
+                            </tr>
+                            <tr class="hover:bg-dark-border/20" 
+                                data-status="active" 
+                                data-course="graphic design" 
+                                data-joining="2023-01-10" 
+                                data-resignation="">
+                                <td class="p-3"><input type="checkbox" class="row-checkbox w-4 h-4 text-primary bg-dark-bg rounded"></td>
+                                <td class="px-3 py-4"><a href="#" class="font-medium text-primary hover:underline">STUF0E741</a></td>
+                                <td class="px-3 py-4">S. Ghulam Abbas Naqvi</td>
+                                <td class="px-3 py-4"><span class="text-xs text-gray-500">No Picture</span></td>
+                                <td class="px-3 py-4">ghulamabbasnaqvi.tms@gmail.com</td>
+                                <td class="px-3 py-4"><span class="px-2 py-1 text-xs font-semibold rounded-md bg-emerald-900 text-emerald-300">Active</span></td>
+                            </tr>
+                            <!-- Making one INACTIVE with a RESIGNATION date for testing filters -->
+                            <tr class="hover:bg-dark-border/20" 
+                                data-status="inactive" 
+                                data-course="digital marketing" 
+                                data-joining="2022-05-15" 
+                                data-resignation="2023-11-01">
+                                <td class="p-3"><input type="checkbox" class="row-checkbox w-4 h-4 text-primary bg-dark-bg rounded"></td>
+                                <td class="px-3 py-4"><a href="#" class="font-medium text-primary hover:underline">STUEBFABB</a></td>
+                                <td class="px-3 py-4">S.M.Ali Rizvi</td>
+                                <td class="px-3 py-4"><span class="text-xs text-gray-500">No Picture</span></td>
+                                <td class="px-3 py-4">alirizvi.tms@gmail.com</td>
+                                <td class="px-3 py-4"><span class="px-2 py-1 text-xs font-semibold rounded-md bg-red-900 text-red-300">Inactive</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- =========== DYNAMIC FILTER SIDEBAR =========== -->
+    <div id="filter-backdrop" class="fixed inset-0 bg-black/50 z-40 hidden backdrop-blur-sm transition-opacity"></div>
+    
+    <div id="filter-sidebar" class="fixed inset-y-0 right-0 w-80 bg-dark-card border-l border-dark-border shadow-2xl z-50 transform translate-x-full overflow-y-auto flex flex-col">
+        <!-- Header -->
+        <div class="p-5 border-b border-dark-border flex items-center justify-between sticky top-0 bg-dark-card z-10">
+            <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                <i data-lucide="filter" class="w-5 h-5 text-primary"></i> Filters
+            </h2>
+            <button id="close-filter-btn" class="text-gray-400 hover:text-white transition-colors">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <!-- Filter Content -->
+        <div class="p-5 space-y-6 flex-1">
+            
+            <!-- Filter Group: Status -->
+            <div class="space-y-2">
+                <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider">By Status</label>
+                <select id="filter-status" class="w-full px-3 py-2 text-sm rounded-lg border focus:ring-1 focus:ring-primary focus:border-primary outline-none filter-select">
+                    <option value="">All</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+            </div>
+
+            <!-- Filter Group: Joining Date -->
+            <div class="space-y-2">
+                <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider">By Joining Date</label>
+                <select id="filter-joining" class="w-full px-3 py-2 text-sm rounded-lg border focus:ring-1 focus:ring-primary focus:border-primary outline-none filter-select">
+                    <option value="">Any date</option>
+                    <option value="today">Today</option>
+                    <option value="7days">Past 7 days</option>
+                    <option value="month">This month</option>
+                    <option value="year">This year</option>
+                </select>
+            </div>
+
+            <!-- Filter Group: Resignation Date -->
+            <div class="space-y-2">
+                <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider">By Resignation Date</label>
+                <select id="filter-resignation" class="w-full px-3 py-2 text-sm rounded-lg border focus:ring-1 focus:ring-primary focus:border-primary outline-none filter-select">
+                    <option value="">Any date</option>
+                    <option value="today">Today</option>
+                    <option value="7days">Past 7 days</option>
+                    <option value="month">This month</option>
+                    <option value="year">This year</option>
+                    <option value="nodate">No date</option>
+                    <option value="hasdate">Has date</option>
+                </select>
+            </div>
+
+            <!-- Filter Group: Course -->
+            <div class="space-y-2">
+                <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider">By Course</label>
+                <select id="filter-course" class="w-full px-3 py-2 text-sm rounded-lg border focus:ring-1 focus:ring-primary focus:border-primary outline-none filter-select">
+                    <option value="">All</option>
+                    <option value="Adobe Photoshop Part 2">Adobe Photoshop Part 2</option>
+                    <option value="SEO For Advance">SEO For Advance</option>
+                    <option value="Adobe Photoshop Level 1">Adobe Photoshop Level 1</option>
+                    <option value="React JS">React JS</option>
+                    <option value="Google Sheet">Google Sheet</option>
+                    <option value="ChatGpt">ChatGpt</option>
+                    <option value="Office and Administrative Management Training">Office and Administrative Management Training</option>
+                    <option value="JavaScript Full Course English">JavaScript Full Course English</option>
+                    <option value="Adobe Illustrator Part 2">Adobe Illustrator Part 2</option>
+                    <option value="English Language Course">English Language Course</option>
+                    <option value="AI for Basic">AI for Basic</option>
+                    <option value="Basic for AI(SEO)">Basic for AI(SEO)</option>
+                    <option value="CSS Part 2">CSS Part 2</option>
+                    <option value="YOUTUBE">YOUTUBE</option>
+                    <option value="Backend Level 2 - Object Oriented Programming">Backend Level 2 - Object Oriented Programming</option>
+                    <option value="Backend Level 1 - Programming with Python">Backend Level 1 - Programming with Python</option>
+                    <option value="Figma Prototyping-Animation Course">Figma Prototyping-Animation Course</option>
+                    <option value="Basic of computer and technology">Basic of computer and technology</option>
+                    <option value="Photoshop, illustrator and Indesign">Photoshop, illustrator and Indesign</option>
+                    <option value="Adobe Illustrator Part 3">Adobe Illustrator Part 3</option>
+                    <option value="Digital Marketing in SM">Digital Marketing in SM</option>
+                    <option value="Tailwind CSS Part 2">Tailwind CSS Part 2</option>
+                    <option value="devops">devops</option>
+                    <option value="Adobe Illustrator Part 1">Adobe Illustrator Part 1</option>
+                    <option value="Excel">Excel</option>
+                    <option value="Marketing & Sales">Marketing & Sales</option>
+                    <option value="HTML Part 3">HTML Part 3</option>
+                    <option value="Foundations of E-Commerce">Foundations of E-Commerce</option>
+                    <option value="How does the Internet Works">How does the Internet Works</option>
+                    <option value="OTHER SOCIAL MEDIA PLATFORM">OTHER SOCIAL MEDIA PLATFORM</option>
+                    <option value="Networking">Networking</option>
+                    <option value="Backend Level 4 - Getting Familiar with Frameworks & Connections">Backend Level 4 - Getting Familiar with Frameworks & Connections</option>
+                    <option value="HR COURSE">HR COURSE</option>
+                    <option value="Cold Email">Cold Email</option>
+                    <option value="For Beginners">For Beginners</option>
+                    <option value="X.com (formerly twitter)">X.com (formerly twitter)</option>
+                    <option value="WhatsApp-Marketing-Mastery-WhatsApp-API">WhatsApp-Marketing-Mastery-WhatsApp-API</option>
+                    <option value="Backend Level 3 - Hands on With Database">Backend Level 3 - Hands on With Database</option>
+                    <option value="AI for Video Editing & Animation">AI for Video Editing & Animation</option>
+                    <option value="CSS Part 3">CSS Part 3</option>
+                    <option value="After Effect">After Effect</option>
+                    <option value="AI for Graphic Design">AI for Graphic Design</option>
+                    <option value="GOOGLE ADS AND MY GOOGLE BUSINESS">GOOGLE ADS AND MY GOOGLE BUSINESS</option>
+                    <option value="Google’s 9 Hour Prompt Engineering Course in 20 mins">Google’s 9 Hour Prompt Engineering Course in 20 mins</option>
+                    <option value="QUESTIONS, UPDATE & BONUS AND MATERIAL">QUESTIONS, UPDATE & BONUS AND MATERIAL</option>
+                    <option value="Blender Beginner">Blender Beginner</option>
+                    <option value="Digital Marketing Foundation Course">Digital Marketing Foundation Course</option>
+                    <option value="Tailwind CSS Part 1">Tailwind CSS Part 1</option>
+                    <option value="Excel 365">Excel 365</option>
+                    <option value="Javascripts">Javascripts</option>
+                    <option value="INSTAGRAM">INSTAGRAM</option>
+                    <option value="INTRODUCTION to SMM">INTRODUCTION to SMM</option>
+                    <option value="Adobe Photoshop Part 3">Adobe Photoshop Part 3</option>
+                    <option value="React">React</option>
+                    <option value="Basic of Computer and Internet">Basic of Computer and Internet</option>
+                    <option value="Figma">Figma</option>
+                    <option value="Top Computer Problems and How to Solve Them On Your Own">Top Computer Problems and How to Solve Them On Your Own</option>
+                    <option value="Adobe Premiere Pro">Adobe Premiere Pro</option>
+                    <option value="LANDING PAGES, WEB 2.0 AND BLOGGING">LANDING PAGES, WEB 2.0 AND BLOGGING</option>
+                    <option value="Sales Training">Sales Training</option>
+                    <option value="HTML Part 1">HTML Part 1</option>
+                    <option value="Store Development & Branding">Store Development & Branding</option>
+                    <option value="FACEBOOK">FACEBOOK</option>
+                    <option value="HTML Part 2">HTML Part 2</option>
+                    <option value="Blender Advance">Blender Advance</option>
+                    <option value="AI for Frontend">AI for Frontend</option>
+                    <option value="LinkedIn">LinkedIn</option>
+                    <option value="CSS Part 1">CSS Part 1</option>
+                    <option value="seo For Intermediate">seo For Intermediate</option>
+                    <option value="PINTEREST">PINTEREST</option>
+                    <option value="Basic Graphic Designing">Basic Graphic Designing</option>
+                    <option value="Wordpress">Wordpress</option>
+                    <option value="Canva">Canva</option>
+                    <option value="Adobe Animate">Adobe Animate</option>
+                    <option value="Prompt engineering">Prompt engineering</option>
+                    <option value="AI for SMM">AI for SMM</option>
+                    <option value="Scaling & Analytics">Scaling & Analytics</option>
+                    <option value="MS Office Complete Course">MS Office Complete Course</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Footer Actions -->
+        <div class="p-5 border-t border-dark-border sticky bottom-0 bg-dark-card z-10 space-y-3">
+            <button id="apply-filters-btn" class="w-full py-2.5 bg-primary hover:bg-primary-dark text-white font-semibold rounded-lg transition-colors">Apply Filters</button>
+            <button id="reset-filters-btn" class="w-full py-2.5 bg-dark-border hover:bg-dark-border/70 text-gray-300 font-semibold rounded-lg transition-colors">Reset All</button>
+        </div>
+    </div>
+</div>
+
+  <script>
+        lucide.createIcons();
+
+        // --- FULLY FUNCTIONAL SCRIPT BLOCK ---
+        function toggleDropdown(panelId, iconId) {
+            const panel = document.getElementById(panelId);
+            const icon = document.getElementById(iconId);
+            panel.classList.toggle('hidden');
+            if (panel.classList.contains('hidden')) {
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebar = document.getElementById('sidebar');
+            const openSidebarBtn = document.getElementById('open-sidebar-btn');
+            const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+            
+            const activeClass = "bg-gradient-to-r from-primary to-orange-500 text-white font-semibold rounded-lg shadow-lg";
+            const inactiveClass = "text-gray-400 hover:text-white rounded-lg transition-colors";
+            const activeSubClass = "text-primary font-semibold";
+            const inactiveSubClass = "text-gray-400 hover:text-white";
+            let currentPage = window.location.pathname.split('/').pop() || 'admindashboard.html';
+
+            if (openSidebarBtn) {
+                const openSidebar = () => { sidebar.classList.remove('-translate-x-full'); sidebarOverlay.classList.remove('hidden'); };
+                const closeSidebar = () => { sidebar.classList.add('-translate-x-full'); sidebarOverlay.classList.add('hidden'); };
+                openSidebarBtn.addEventListener('click', openSidebar);
+                closeSidebarBtn.addEventListener('click', closeSidebar);
+                sidebarOverlay.addEventListener('click', closeSidebar);
+            }
+
+            // Set Active Menu Items Dynamically
+            const sidebarLinks = sidebar.querySelectorAll('a');
+            sidebarLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                if (href && href.includes(currentPage) && currentPage !== '') {
+                    const panel = link.closest('div[id$="-panel"]');
+                    if (panel) {
+                        link.className = link.className.replace(inactiveSubClass, activeSubClass);
+                        panel.classList.remove('hidden');
+                        const btn = panel.previousElementSibling;
+                        if (btn) {
+                            btn.className = btn.className.replace(inactiveClass, activeClass);
+                            const icon = btn.querySelector('i[id$="-icon"]');
+                            if (icon) icon.style.transform = 'rotate(180deg)';
+                        }
+                    } else {
+                        link.className = link.className.replace(inactiveClass, activeClass);
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
